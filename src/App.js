@@ -8,7 +8,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 function App() {
   // const [currentPage, setCurrentPage] = useState('HomePage');
   // const navigate = (page) => {
-  //   setCurrentPage(page);
+  //   setCurrentPage(page); 
   // };
   return (
     // <div className={Styles.appContainer}>
