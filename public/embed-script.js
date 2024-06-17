@@ -8,6 +8,6 @@
 
   // Load the React app script
   const script = document.createElement('script');
-  script.src = "https://aruns2008.github.io/calculator/static/js/main.3b640362.js"; // Adjust the path if necessary
+  script.src = "https://aruns2008.github.io/calculator/static/js/main.cd431078.js"; // Adjust the path if necessary
   document.head.appendChild(script);
 })();
