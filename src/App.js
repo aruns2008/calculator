@@ -26,7 +26,7 @@ function App() {
     // <CalculationStorageProvider>
     //   <CalculatorPage />
     // </CalculationStorageProvider>
-    <Router>
+    <Router basename="/calculator">
       <CalculationStorageProvider>
         <Routes>
           <Route path="/" element={<CalculatorPage />} />
