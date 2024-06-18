@@ -16,9 +16,4 @@
   const customScript = document.createElement('script');
   customScript.src = "https://aruns2008.github.io/calculator/script.js";
   document.head.appendChild(customScript);
-
-  // Load the React app script
-  const script = document.createElement('script');
-  script.src = "https://aruns2008.github.io/calculator/static/js/main.cd431078.js"; // Adjust the path if necessary
-  document.head.appendChild(script);
 })();
