@@ -1,4 +1,5 @@
 (function() {
+  console.log("called");
   // Create a div element where the React app will be rendered
   const rootDiv = document.createElement('div');
   rootDiv.id = 'calculator-root';
