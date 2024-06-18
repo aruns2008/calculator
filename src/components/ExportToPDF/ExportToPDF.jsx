@@ -4,7 +4,6 @@ import html2canvas from "html2canvas";
 import "./ExportToPDF.css";
 import { useCalculationStorage } from "../../context/StorageContext";
 
-
 const ExportToPDF = ({
   dates,
   showPdf,
@@ -40,46 +39,17 @@ const ExportToPDF = ({
     }
   }, [showPdf]);
 
-  // const handlePrint = () => {
-  //   const input = printRef.current;
-  //   const originalDisplay = input.style.display;
-  //   input.style.display = "block";
-  //   html2canvas(input, { scale: 1 }).then((canvas) => {
-  //     const imgData = canvas.toDataURL("image/png");
-  //     const pdf = new jsPDF("p", "mm", "a4");
-  //     const imgWidth = 210; // A4 width in mm
-  //     const pageHeight = 295; // A4 height in mm
-  //     const imgHeight = (canvas.height * imgWidth) / canvas.width;
-  //     let heightLeft = imgHeight;
-  //     let position = 0;
-
-  //     pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-  //     heightLeft -= pageHeight;
-
-  //     while (heightLeft >= 0) {
-  //       position = heightLeft - imgHeight;
-  //       pdf.addPage();
-  //       pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-  //       heightLeft -= pageHeight;
-  //     }
-
-  //     pdf.save("download.pdf");
-  //     input.style.display = originalDisplay;
-  //     setShowPdf(false);
-  //     setPdfType("");
-  //     setPdfIndex("");
-  //   });
-  // };
   const handlePrint = () => {
     const input = printRef.current;
     const originalDisplay = input.style.display;
     input.style.display = "block";
-  
+
     // Add a temporary style to center the content and adjust padding
     input.style.padding = "20px";
-    input.style.width = "80%";
+    input.style.width = "100%";
+    input.style.maxWidth = "800px";
     input.style.margin = "auto";
-  
+
     html2canvas(input, { scale: 2 }).then((canvas) => {
       const imgData = canvas.toDataURL("image/png");
       const pdf = new jsPDF("p", "mm", "a4");
@@ -88,31 +58,31 @@ const ExportToPDF = ({
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
       let heightLeft = imgHeight;
       let position = 0;
-  
+
       pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
       heightLeft -= pageHeight;
-  
+
       while (heightLeft > 0) {
         position = heightLeft - imgHeight;
         pdf.addPage();
         pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
         heightLeft -= pageHeight;
       }
-  
+
       pdf.save("download.pdf");
-  
+
       // Revert the styles back to original
       input.style.display = originalDisplay;
       input.style.padding = "";
       input.style.width = "";
       input.style.margin = "";
-  
+
       setShowPdf(false);
       setPdfType("");
       setPdfIndex("");
     });
   };
-  
+
   const renderValue = (value) => {
     if (value)
       return (
@@ -120,17 +90,45 @@ const ExportToPDF = ({
       );
   };
 
+  const getCurrentDate = () => {
+    const date = new Date();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const year = date.getFullYear();
+    return `${month}-${day}-${year}`;
+  };
+
+  const safeIndex =
+    Array.isArray(getCalculationDataValue("scenario-name")) &&
+    index < getCalculationDataValue("scenario-name").length
+      ? index
+      : null;
+  const safeDateIndex =
+    Array.isArray(dates) && index < dates.length ? index : null;
+
+  const formatNumber = (number) => {
+    if (typeof number === "number" || !isNaN(Number(number))) {
+      return Number(number).toLocaleString("en-US");
+    }
+    return number;
+  };
   return (
     <div>
-      <div ref={printRef} style={{display:"none"}}>
+      <div ref={printRef} style={{ display: "" }}>
         <div className="pdf-container">
           <div className="header">
             <div className="title-block">
               <h1>
-                {getCalculationDataValue("scenario-name")[index] ||
+                {(safeIndex !== null &&
+                  getCalculationDataValue("scenario-name")[safeIndex]) ||
                   "Investment Account Fee Estimate 1"}
               </h1>
-              <p>As of Date: {dates[index] ? dates[index] : ""}</p>
+              <p>
+                As of Date:{" "}
+                {safeDateIndex !== null && dates[safeDateIndex]
+                  ? dates[safeDateIndex]
+                  : getCurrentDate()}
+              </p>
             </div>
             <div className="actions">
               <img
@@ -141,7 +139,7 @@ const ExportToPDF = ({
             </div>
           </div>
           <div className="fee-details">
-            {pdfType === "comparison" ? (
+            {pdfType !== "comparison" ? (
               <div className="comparison-pdf">
                 <div className="table-wrapper">
                   <div className="field-container rate-doller">
@@ -173,7 +171,23 @@ const ExportToPDF = ({
                         )}
                     </div>
                   </div>
+                  <div className="field-container">
+                    <div className="field-name">Account Value</div>
 
+                    <div key={index} className="header-labels">
+                      {calculationData["account-value"] &&
+                        calculationData["account-value"].map((value, idx) =>
+                          renderValue(value) ? (
+                            <div
+                              key={idx}
+                              className="header-label three-column"
+                            >
+                              {`$${formatNumber(value)}`}
+                            </div>
+                          ) : null
+                        )}
+                    </div>
+                  </div>
                   <div className="field-container">
                     <div className="field-name">Financial Professional Fee</div>
                     {fpValues.length > 0 && (
@@ -185,12 +199,12 @@ const ExportToPDF = ({
                               <React.Fragment key={idx}>
                                 <div className="input-values">
                                   {renderValue(value.rate)
-                                    ? `$${value.rate}`
+                                    ? `${Number(value.rate).toLocaleString()}%`
                                     : "N/A"}
                                 </div>
                                 <div className="input-values">
                                   {renderValue(value.price)
-                                    ? `${value.price}%`
+                                    ? `$${Number(value.price).toLocaleString()}`
                                     : "N/A"}
                                 </div>
                               </React.Fragment>
@@ -211,12 +225,12 @@ const ExportToPDF = ({
                               <React.Fragment key={idx}>
                                 <div className="input-values">
                                   {value && renderValue(value.rate)
-                                    ? `${value.rate}%`
+                                    ? `${Number(value.rate).toLocaleString()}%`
                                     : "N/A"}
                                 </div>
                                 <div className="input-values">
                                   {value && renderValue(value.price)
-                                    ? `$${value.price}`
+                                    ? `$${Number(value.price).toLocaleString()}`
                                     : "N/A"}
                                 </div>
                               </React.Fragment>
@@ -234,12 +248,12 @@ const ExportToPDF = ({
                           <React.Fragment key={idx}>
                             <div className="input-values">
                               {value && value.rate && value.rate !== "N/A"
-                                ? `${value.rate}%`
+                                ? `${Number(value.rate).toLocaleString()}%`
                                 : "N/A"}
                             </div>
                             <div className="input-values">
                               {value && value.price && value.price !== "N/A"
-                                ? `$${value.price}`
+                                ? `$${Number(value.price).toLocaleString()}`
                                 : "N/A"}
                             </div>
                           </React.Fragment>
@@ -257,12 +271,12 @@ const ExportToPDF = ({
                           <React.Fragment key={idx}>
                             <div className="input-values">
                               {value && value.rate && value.rate !== "N/A"
-                                ? `${value.rate}%`
+                                ? `${Number(value.rate).toLocaleString()}%`
                                 : "N/A"}
                             </div>
                             <div className="input-values">
                               {value && value.price && value.price !== "N/A"
-                                ? `$${value.price}`
+                                ? `$${Number(value.price).toLocaleString()}`
                                 : "N/A"}
                             </div>
                           </React.Fragment>
@@ -280,12 +294,12 @@ const ExportToPDF = ({
                               <React.Fragment key={idx}>
                                 <div className="input-values">
                                   {renderValue(data?.rate)
-                                    ? `${data.rate}%`
+                                    ? `${Number(data.rate).toLocaleString()}%`
                                     : "N/A"}
                                 </div>
                                 <div className="input-values">
                                   {renderValue(data?.price)
-                                    ? `$${data.price}`
+                                    ? `$${Number(data.price).toLocaleString()}`
                                     : "N/A"}
                                 </div>
                               </React.Fragment>
@@ -307,12 +321,12 @@ const ExportToPDF = ({
                               <React.Fragment key={idx}>
                                 <div className="input-values">
                                   {renderValue(data?.rate)
-                                    ? `${data.rate}%`
+                                    ? `${Number(data.rate).toLocaleString()}%`
                                     : "N/A"}
                                 </div>
                                 <div className="input-values">
                                   {renderValue(data?.price)
-                                    ? `$${data.price}`
+                                    ? `$${Number(data.price).toLocaleString()}`
                                     : "N/A"}
                                 </div>
                               </React.Fragment>
@@ -334,12 +348,12 @@ const ExportToPDF = ({
                               <React.Fragment key={idx}>
                                 <div className="input-values">
                                   {renderValue(data?.rate)
-                                    ? `${data.rate}%`
+                                    ? `${Number(data.rate).toLocaleString()}%`
                                     : "N/A"}
                                 </div>
                                 <div className="input-values">
                                   {renderValue(data?.price)
-                                    ? `$${data.price}`
+                                    ? `$${Number(data.price).toLocaleString()}`
                                     : "N/A"}
                                 </div>
                               </React.Fragment>
@@ -361,12 +375,12 @@ const ExportToPDF = ({
                               <React.Fragment key={idx}>
                                 <div className="input-values">
                                   {renderValue(data?.rate)
-                                    ? `${data.rate}%`
+                                    ? `${Number(data.rate).toLocaleString()}%`
                                     : "N/A"}
                                 </div>
                                 <div className="input-values">
                                   {renderValue(data?.price)
-                                    ? `$${data.price}`
+                                    ? `$${Number(data.price).toLocaleString()}`
                                     : "N/A"}
                                 </div>
                               </React.Fragment>
@@ -389,18 +403,69 @@ const ExportToPDF = ({
                               <React.Fragment key={idx}>
                                 <div className="input-values">
                                   {renderValue(data?.rate)
-                                    ? `${data.rate}%`
+                                    ? `${Number(data.rate).toLocaleString()}%`
                                     : "N/A"}
                                 </div>
                                 <div className="input-values">
                                   {renderValue(data?.price)
-                                    ? `$${data.price}`
+                                    ? `$${Number(data.price).toLocaleString()}`
                                     : "N/A"}
                                 </div>
                               </React.Fragment>
                             )
                         )}
                     </div>
+                  </div>
+                  <div className="field-container">
+                    <div className="field-name">
+                      Financial Professional Fee Type
+                    </div>
+                    <div className="header-labels">
+                      {calculationData["FPfeeType"] &&
+                        calculationData["FPfeeType"].map((feeType, index) =>
+                          feeType !== "" ? (
+                            <div
+                              key={index}
+                              className="header-label three-column"
+                            >
+                              {feeType}
+                            </div>
+                          ) : null
+                        )}
+                    </div>
+                  </div>
+                  <div className="field-container">
+                    <div className="field-name">Program Selected</div>
+                    <div className="header-labels">
+                      {calculationData["paymentOption"] &&
+                        calculationData["paymentOption"].map((data, index) =>
+                          data !== "" ? (
+                            <div
+                              key={index}
+                              className="header-label three-column"
+                            >
+                              {data}
+                            </div>
+                          ) : null
+                        )}
+                    </div>
+                  </div>
+
+                  <div className="field-container">
+                    <div className="field-name">
+                      Financial Professional AUA discount applied
+                    </div>
+                    {calculationData["AdditionalDetails"] &&
+                      calculationData["AdditionalDetails"].map((data, index) =>
+                        data?.auaDiscount &&
+                        calculationData["scenario-name"][index] ? (
+                          <div key={index} className="header-labels">
+                            <div className="header-label three-column">
+                              {data.auaDiscount}%
+                            </div>
+                          </div>
+                        ) : null
+                      )}
                   </div>
                 </div>
               </div>
@@ -425,7 +490,7 @@ const ExportToPDF = ({
                   <div className="value-container">
                     <div className="value">
                       {fpValues[index]?.rate
-                        ? `${fpValues[index]?.rate}%`
+                        ? `${Number(fpValues[index]?.rate).toLocaleString()}%`
                         : "N/A"}
                     </div>
                     <div className="value">

@@ -2,29 +2,43 @@ import React, { useState } from "react";
 import "./NumberInput.css";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-const NumberInput = ({ value, onChange, placeholder, className, symbol,name }) => {
+
+const NumberInput = ({ value, onChange, placeholder, className, symbol, name,onFocus }) => {
   const [isIncrementClicked, setIsIncrementClicked] = useState(false);
   const [isDecrementClicked, setIsDecrementClicked] = useState(false);
-  const formatNumber = (num) => {    
-    if (!num) return "";
+
+  const formatNumber = (num) => {
+    if (!num && num !== 0) return "";
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
+
+  const parseValue = (value) => {
+    if (typeof value === "string") {
+      return parseFloat(value.replace(/,/g, "").replace(symbol, "")) || 0;
+    }
+    return parseFloat(value) || 0;
+  };
+
   const handleIncrement = () => {
-    const newValue = (parseFloat(value.replace(/,/g, "")) || 0) + 1;
-    onChange({ target: { value: formatNumber(newValue),name:name } });
+    const numericValue = parseValue(value);
+    const newValue = numericValue + 1;
+    onChange({ target: { value: formatNumber(newValue), name: name } });
   };
-  
+
   const handleDecrement = () => {
-    const currentValue = parseFloat(value.replace(/,/g, "")) || 0;
-    const newValue = currentValue > 1 ? currentValue - 1 : 0;
-    onChange({ target: { value: formatNumber(newValue),name:name } });
+    const numericValue = parseValue(value);
+    const newValue = numericValue > 1 ? numericValue - 1 : 0;
+    onChange({ target: { value: formatNumber(newValue), name: name } });
   };
+
   const handleInputChange = (e) => {
     let inputValue = e.target.value.replace(/,/g, "").replace(symbol, "");
     if (/^\d*\.?\d*$/.test(inputValue)) {
-      onChange({ target: { value: formatNumber(inputValue),name:e.target.name } });
+      onChange({ target: { value: formatNumber(inputValue), name: e.target.name } });
     }
   };
+
+  const formattedValue = formatNumber(parseValue(value));
 
   return (
     <div className="custom-number-input">
@@ -32,10 +46,11 @@ const NumberInput = ({ value, onChange, placeholder, className, symbol,name }) =
         <input
           type="text"
           name={name || ""}
-          value={symbol === "%" ? `${value}%` : `$${value}`}
+          value={symbol === "%" ? `${formattedValue}%` : `$${formattedValue}`}
           onChange={handleInputChange}
           placeholder={placeholder}
           className={className}
+          onFocus={onFocus}
         />
       </div>
       <div className="arrow-buttons">
@@ -49,7 +64,7 @@ const NumberInput = ({ value, onChange, placeholder, className, symbol,name }) =
         >
           <ArrowDropUpIcon
             sx={{
-              color: isIncrementClicked ? "white" : "#3E5463", // Change color based on state
+              color: isIncrementClicked ? "white" : "#3E5463",
               width: "18px",
               height: "18px",
             }}
@@ -65,7 +80,7 @@ const NumberInput = ({ value, onChange, placeholder, className, symbol,name }) =
         >
           <ArrowDropDownIcon
             sx={{
-              color: isDecrementClicked ? "white" : "#3E5463", // Change color based on state
+              color: isDecrementClicked ? "white" : "#3E5463",
               width: "18px",
               height: "18px",
             }}

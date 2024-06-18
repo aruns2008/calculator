@@ -189,7 +189,7 @@ const EstimatedResults = () => {
         />
       </div>
       <div className="results-section">
-        <div className="pdf-sectionn">
+        <div className="pdf-sectionn">  
           <ExportToPDF
             dates={dates}
             showPdf={showPdf}
@@ -197,7 +197,7 @@ const EstimatedResults = () => {
             pdfIndex={pdfIndex}
             setShowPdf={setShowPdf}
             setPdfType={setPdfType}
-            setPdfIndex={setPdfIndex}
+            setPdfIndex={setPdfIndex}            
           />
         </div>
         <div className="section-container">

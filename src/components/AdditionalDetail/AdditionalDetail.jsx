@@ -148,7 +148,7 @@ const AdditionalDetail = ({
               selectedValue={selectedDiscount}
               value={discount}
               onchange={handleDiscountChange}
-              name="auaDiscount"
+              name="auaDiscount"             
             />
             {/* <input type="radio" id="Red" name="colors" value="Red"></input> */}
             <span className="discount-value">{discount}</span>
