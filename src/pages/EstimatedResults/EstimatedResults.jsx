@@ -93,8 +93,9 @@ const EstimatedResults = () => {
     setDeleteIndex("");
     setShareModal(false);
   };
-  const handleOpenPDFModal = () => {
+  const handleOpenPDFModal = (index) => {
     setShowPDFModal(true);
+    setPdfIndex(index);
   };
   const [showPdf, setShowPdf] = useState(false);
   const [pdfType, setPdfType] = useState("");
@@ -103,73 +104,11 @@ const EstimatedResults = () => {
   const [shareType, setShareType] = useState();
   const handlePdfGeneration = (type, index) => {
     setShowPdf(true);
-    setPdfType(type);
-    setPdfIndex(index);
+    setPdfType(type);    
     setShowPDFModal(false);
   };
   const formatId = (name) => name.replace(/\s+/g, "");
-  // const handleShare = async (index, type) => {
-  //   console.log("type",type)
-  //   const currentDate = new Date();
-  //   setShareDate(formatDate(currentDate));
-  //   if (
-  //     getCalculationDataValue("scenario-name")[index] &&
-  //     getCalculationDataValue("scenario-name")[index] !== ""
-  //   ) {
-  //     setLink(
-  //       "http://localhost:3000/scenario-viewer?scenarioId=" +
-  //       formatId(getCalculationDataValue("scenario-name")[index])
-  //     );
-  //   } else {
-  //     setLink("http://localhost:3000/scenario-viewer?scenarioId=" + "test");
-  //   }
-
-  //   setShareModal(true);
-  //   const data1 = {
-  //     name: getCalculationDataValue("scenario-name")[index] || "test",
-  //     id:formatId(getCalculationDataValue("scenario-name")[index] || "test"),
-  //     fpValues: fpValues[index],
-  //     accountValue: accountValue[index],
-  //     fundExpenses: fundExpenses[index],
-  //     fpPayout: fpPayout[index],
-  //     houseHoldValue: houseHoldValue[index],
-  //     feeType: feeType[index],
-  //     programFee: programFee[index],
-  //     programFeeValues: programFeeValues[index],
-  //     strategistFeeValues: strategistFeeValues[index],
-  //     totalAccountFeeValues: totalAccountFeeValues[index],
-  //     totalClientFeeValues: totalClientFeeValues[index],
-  //     grossAnnualFeeValues: grossAnnualFeeValues[index],
-  //     netAnnualFeeValues: netAnnualFeeValues[index],
-  //   };
-  //   const data2 = {
-  //     name: getCalculationDataValue("scenario-name")[0] || "test",
-  //     id:formatId(getCalculationDataValue("scenario-name")[index] || "test"),
-  //     fpValues: fpValues,
-  //     accountValue: accountValue,
-  //     fundExpenses: fundExpenses,
-  //     fpPayout: fpPayout,
-  //     houseHoldValue: houseHoldValue,
-  //     feeType: feeType,
-  //     programFee: programFee,
-  //     programFeeValues: programFeeValues,
-  //     strategistFeeValues: strategistFeeValues,
-  //     totalAccountFeeValues: totalAccountFeeValues,
-  //     totalClientFeeValues: totalClientFeeValues,
-  //     grossAnnualFeeValues: grossAnnualFeeValues,
-  //     netAnnualFeeValues: netAnnualFeeValues,
-  //   };
-  //   // Store data
-  //   if(type === "group-scenario"){
-  //     await storeData(data2);
-  //   } else {
-  //     await storeData(data1);
-  //   }
-
-  //   // Retrieve data
-  //   const retrievedData = await retrieveData(data2.name);
-  //   console.log(retrievedData);
-  // };
+  
   const handleShare = async (index, type) => {
     setShareIndex(index);
     setShareType(type);
@@ -188,8 +127,6 @@ const EstimatedResults = () => {
   const handleAgreeAndContinue = async () => {
     let scenarioName = "";
     let data = {};
-    
-
     if (shareType === "group-scenario") {
       scenarioName = getCalculationDataValue("scenario-name")[0] || "test";
      const AUAdiscount = getCalculationDataValue("AdditionalDetails");
@@ -326,7 +263,7 @@ const EstimatedResults = () => {
                     ></Button>
                     <Button
                       text={"Export ▼"}
-                      onClick={handleOpenPDFModal}
+                      onClick={()=>handleOpenPDFModal(index)}
                       configuresStyles={"result-button action-button"}
                     ></Button>
                   </div>

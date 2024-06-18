@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import "./StepFooter.css";
 import { useNavigate } from "react-router-dom";
 import { useCalculationStorage } from "../../context/StorageContext";
-const StepFooter = ({ currentStep = 1, from }) => {
+const StepFooter = ({ currentStep = 1, from }) => {  
   const {
     fpValues,
     stepsCompleted,
@@ -52,7 +52,7 @@ const StepFooter = ({ currentStep = 1, from }) => {
 
   return (
     <div className="step-footer">
-      <div className="step-info">{stepLabels[currentStep]}</div>
+    {from != "estimated-results" ? <div className="step-info">{stepLabels[currentStep]}</div> : <div className="step-info"></div>}
       {/* <div className="result step-info">
         <span>Financial Professional Fee</span>        
         <span>{`Rate: ${

@@ -74,10 +74,11 @@ span {
   color: #1c2b36;
 }
 
-.row {
+.estimated-results .row {
   display: flex;
   justify-content: space-between;
   padding: 6px 0;
+  margin: 0;
 }
 
 .label {
@@ -126,10 +127,6 @@ span {
   justify-content: center;
 }
 
-/* .left-subSection,
-.right-subSection {
-    width: 50%;
-} */
 .left-subSection {
   width: 632px;
 }
@@ -315,9 +312,8 @@ span {
   justify-content: center;
 }
 .bottom-section {
-  margin-bottom: 150px;
-  /* padding: 0 20%; */
-  display: flex;
+  margin-bottom: 150px;  
+  display: none;
   justify-content: center;
   align-items: center;
 }
@@ -541,5 +537,12 @@ span {
   }
   .field-name{
     width: 600px;
+  }
+}
+
+
+@media (min-width: 991px) {
+  .bottom-section {
+    display: flex;
   }
 }

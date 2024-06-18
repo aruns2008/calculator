@@ -89,7 +89,8 @@ function CalculatorPage() {
           <div className="container">
             <div className="contentWrapper">
               <div className="imageColumn">
-                <img loading="lazy" src="/icon.svg" className="featureImage" />
+              <img loading="lazy" src={`${process.env.PUBLIC_URL}/icon.svg`} className="featureImage" alt="Feature" />
+
               </div>
               <div className="textColumn">
                 <div className="description">

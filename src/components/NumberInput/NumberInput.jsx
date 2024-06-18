@@ -9,7 +9,6 @@ const NumberInput = ({ value, onChange, placeholder, className, symbol,name }) =
     if (!num) return "";
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
-
   const handleIncrement = () => {
     const newValue = (parseFloat(value.replace(/,/g, "")) || 0) + 1;
     onChange({ target: { value: formatNumber(newValue),name:name } });

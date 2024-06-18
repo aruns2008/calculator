@@ -21,11 +21,11 @@
   font: 600 20px/140% Avenir Next, -apple-system, Roboto, Helvetica, sans-serif;
 }
 
-@media (max-width: 991px) {
+/* @media (max-width: 991px) {
   .header-title {
     max-width: 100%;
   }
-}
+} */
 
 .subheader-title {
   color: var(--Text-text-secondary, #3e5463);
@@ -101,7 +101,7 @@
   max-width: 100%;
 }
 
-.container {
+.calculation-wrapper-outer > .container {
   align-self: stretch;
   max-width: 632px;
 }
@@ -980,6 +980,7 @@ input:focus-visible {
   display: flex;
   justify-content: center;
   gap: 60px;
+  padding-top: 100px;
 }
 
 .calculation-right {
