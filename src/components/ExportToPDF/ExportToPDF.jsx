@@ -114,7 +114,7 @@ const ExportToPDF = ({
   };
   return (
     <div>
-      <div ref={printRef} style={{ display: "" }}>
+      <div ref={printRef} style={{ display: "none" }}>
         <div className="pdf-container">
           <div className="header">
             <div className="title-block">
@@ -139,7 +139,7 @@ const ExportToPDF = ({
             </div>
           </div>
           <div className="fee-details">
-            {pdfType !== "comparison" ? (
+            {pdfType === "comparison" ? (
               <div className="comparison-pdf">
                 <div className="table-wrapper">
                   <div className="field-container rate-doller">
@@ -701,151 +701,189 @@ const ExportToPDF = ({
             )}
             <div className="results-divider"></div>
 
-            <div className="pdf-bottom-section-parent">
-              <div className="pdf-bottom-left">
-                <span className="bottom-section-heading">
-                  Scenario Assumptions
-                </span>
-                <div className="results-divider"></div>
-                <div className="row">
-                  <div className="label pdf-bottom-section">Account Value</div>
-                  <div className="value-container">
-                    <div className="value">
-                      {accountValue[index]?.price
-                        ? `$${Number(
-                            accountValue[index]?.price
-                          ).toLocaleString()}`
-                        : "N/A"}
+            {pdfType !== "comparison" && (
+              <div className="pdf-bottom-section-parent">
+                <div className="pdf-bottom-left">
+                  <span className="bottom-section-heading">
+                    Scenario Assumptions
+                  </span>
+                  <div className="results-divider"></div>
+                  <div className="row">
+                    <div className="label pdf-bottom-section">
+                      Account Value
+                    </div>
+                    <div className="value-container">
+                      <div className="value">
+                        {accountValue[index]?.price
+                          ? `$${Number(
+                              accountValue[index]?.price
+                            ).toLocaleString()}`
+                          : "N/A"}
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="results-divider"></div>
-                <div className="row">
-                  <div className="label pdf-bottom-section">
-                    WealthPort Household value
-                  </div>
-                  <div className="value-container">
-                    <div className="value">
-                      {houseHoldValue[index]?.rate
-                        ? `${Number(
-                            houseHoldValue[index]?.rate
-                          ).toLocaleString()}%`
-                        : "N/A"}
+                  <div className="results-divider"></div>
+                  <div className="row">
+                    <div className="label pdf-bottom-section">
+                      WealthPort Household value
+                    </div>
+                    <div className="value-container">
+                      <div className="value">
+                        {houseHoldValue[index]?.rate
+                          ? `${Number(
+                              houseHoldValue[index]?.rate
+                            ).toLocaleString()}%`
+                          : "N/A"}
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="results-divider"></div>
-                <div className="row">
-                  <div className="label pdf-bottom-section">
-                    Financial Professional Fee Type
-                  </div>
-                  <div className="value-container types">
-                    <div className="value">{feeType[index] || "N/A"}</div>
-                  </div>
-                </div>
-                <div className="results-divider"></div>
-                <div className="row">
-                  <div className="label pdf-bottom-section">
-                    Program Selected
-                  </div>
-                  <div className="value-container">
-                    <div className="value">
-                      {calculationData["paymentOption"] &&
-                      calculationData["paymentOption"][index]
-                        ? calculationData["paymentOption"][index]
-                        : "N/A"}
+                  <div className="results-divider"></div>
+                  <div className="row">
+                    <div className="label pdf-bottom-section">
+                      Financial Professional Fee Type
+                    </div>
+                    <div className="value-container types">
+                      <div className="value">{feeType[index] || "N/A"}</div>
                     </div>
                   </div>
-                </div>
-                <div className="results-divider"></div>
-                <div className="row">
-                  <div className="label pdf-bottom-section">
-                    Financial Professional AUA discount applied
-                  </div>
-                  <div className="value-container">
-                    <div className="value">
-                      {calculationData["AdditionalDetails"][index] &&
-                      calculationData["AdditionalDetails"][index]?.auaDiscount
-                        ? calculationData["AdditionalDetails"][index]
-                            ?.auaDiscount
-                        : "N/A"}
+                  <div className="results-divider"></div>
+                  <div className="row">
+                    <div className="label pdf-bottom-section">
+                      Program Selected
+                    </div>
+                    <div className="value-container">
+                      <div className="value">
+                        {calculationData["paymentOption"] &&
+                        calculationData["paymentOption"][index]
+                          ? calculationData["paymentOption"][index]
+                          : "N/A"}
+                      </div>
                     </div>
                   </div>
+                  <div className="results-divider"></div>
+                  <div className="row">
+                    <div className="label pdf-bottom-section">
+                      Financial Professional AUA discount applied
+                    </div>
+                    <div className="value-container">
+                      <div className="value">
+                        {calculationData["AdditionalDetails"][index] &&
+                        calculationData["AdditionalDetails"][index]?.auaDiscount
+                          ? calculationData["AdditionalDetails"][index]
+                              ?.auaDiscount
+                          : "N/A"}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="results-divider"></div>
                 </div>
-                <div className="results-divider"></div>
+                <div className="pdf-bottom-right">
+                  <span className="bottom-section-heading">
+                    Program Fee Schedule (UMA/SMA)
+                  </span>
+                  <div className="results-divider"></div>
+                  <div className="row">
+                    <div className="label pdf-bottom-section">
+                      Account Value
+                    </div>
+                    <div className="value-container">
+                      <div className="value">
+                        {accountValue[index]?.price
+                          ? `$${Number(
+                              accountValue[index]?.price
+                            ).toLocaleString()}`
+                          : "N/A"}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="results-divider"></div>
+                  <div className="row">
+                    <div className="label pdf-bottom-section">
+                      WealthPort Household value
+                    </div>
+                    <div className="value-container">
+                      <div className="value">
+                        {houseHoldValue[index]?.rate
+                          ? `${Number(
+                              houseHoldValue[index]?.rate
+                            ).toLocaleString()}%`
+                          : "N/A"}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="results-divider"></div>
+                  <div className="row">
+                    <div className="label pdf-bottom-section">
+                      Financial Professional Fee Type
+                    </div>
+                    <div className="value-container types">
+                      <div className="value">{feeType[index] || "N/A"}</div>
+                    </div>
+                  </div>
+                  <div className="results-divider"></div>
+                  <div className="row">
+                    <div className="label pdf-bottom-section">
+                      Program Selected
+                    </div>
+                    <div className="value-container">
+                      <div className="value">
+                        {calculationData["paymentOption"] &&
+                        calculationData["paymentOption"][index]
+                          ? calculationData["paymentOption"][index]
+                          : "N/A"}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="results-divider"></div>
+                  <div className="row">
+                    <div className="label pdf-bottom-section">
+                      Financial Professional AUA discount applied
+                    </div>
+                    <div className="value-container">
+                      <div className="value">
+                        {calculationData["AdditionalDetails"][index] &&
+                        calculationData["AdditionalDetails"][index]?.auaDiscount
+                          ? calculationData["AdditionalDetails"][index]
+                              ?.auaDiscount
+                          : "N/A"}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="results-divider"></div>
+                </div>
               </div>
-              <div className="pdf-bottom-right">
-                <span className="bottom-section-heading">
-                  Program Fee Schedule (UMA/SMA)
-                </span>
-                <div className="results-divider"></div>
-                <div className="row">
-                  <div className="label pdf-bottom-section">Account Value</div>
-                  <div className="value-container">
-                    <div className="value">
-                      {accountValue[index]?.price
-                        ? `$${Number(
-                            accountValue[index]?.price
-                          ).toLocaleString()}`
-                        : "N/A"}
-                    </div>
-                  </div>
-                </div>
-                <div className="results-divider"></div>
-                <div className="row">
-                  <div className="label pdf-bottom-section">
-                    WealthPort Household value
-                  </div>
-                  <div className="value-container">
-                    <div className="value">
-                      {houseHoldValue[index]?.rate
-                        ? `${Number(
-                            houseHoldValue[index]?.rate
-                          ).toLocaleString()}%`
-                        : "N/A"}
-                    </div>
-                  </div>
-                </div>
-                <div className="results-divider"></div>
-                <div className="row">
-                  <div className="label pdf-bottom-section">
-                    Financial Professional Fee Type
-                  </div>
-                  <div className="value-container types">
-                    <div className="value">{feeType[index] || "N/A"}</div>
-                  </div>
-                </div>
-                <div className="results-divider"></div>
-                <div className="row">
-                  <div className="label pdf-bottom-section">
-                    Program Selected
-                  </div>
-                  <div className="value-container">
-                    <div className="value">
-                      {calculationData["paymentOption"] &&
-                      calculationData["paymentOption"][index]
-                        ? calculationData["paymentOption"][index]
-                        : "N/A"}
-                    </div>
-                  </div>
-                </div>
-                <div className="results-divider"></div>
-                <div className="row">
-                  <div className="label pdf-bottom-section">
-                    Financial Professional AUA discount applied
-                  </div>
-                  <div className="value-container">
-                    <div className="value">
-                      {calculationData["AdditionalDetails"][index] &&
-                      calculationData["AdditionalDetails"][index]?.auaDiscount
-                        ? calculationData["AdditionalDetails"][index]
-                            ?.auaDiscount
-                        : "N/A"}
-                    </div>
-                  </div>
-                </div>
-                <div className="results-divider"></div>
-              </div>
+            )}
+            <div className="comparison-paragraph">
+              <span>
+                *The fee information displayed is a point-in-time estimate based
+                on the information provided for this illustration and may vary
+                from an actual account. Any fees represented in this tool are
+                for illustrative purposes only and actual account fees will
+                fluctuate over time depending on many factors including but not
+                limited to, account value over time and any changes to
+                investment strategy. Discounts displayed in this illustration
+                may not apply initially or over time if qualifying requirements
+                are not met or maintained. An undiscounted Program Fee Schedule
+                can be located at the end of this document. This estimate does
+                not constitute an agreement and does not supersede any client
+                agreements or new account documentation. Client agreements and
+                new account documentation should be reviewed with your financial
+                professional to understand applicable fees and how they are
+                assessed on an account. Strategist Fees are subject to change.
+                Fees are shown annualized, however, will be charged at intervals
+                throughout the year. **Fund expenses are operating costs
+                incurred and charged by the investment companies that provide
+                certain types of investment products. These expenses are not
+                debited directly from an investment account, but do impact the
+                performance of the investment product and therefore are
+                important to consider when investing. Fund expenses displayed
+                are an estimate and may change over time. Consult your financial
+                professional to understand the impact these expenses may have on
+                your account. CAAP® is a registered mark of Cambridge Investment
+                Research, Inc. for its program for investment managers. CAAP and
+                UMA have an annual minimum Program Fee of $250.00. There is no
+                annual minimum Program Fee for CAAP Small Account Solutions.
+              </span>
             </div>
           </div>
         </div>
