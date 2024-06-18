@@ -7,7 +7,7 @@ import ScenarioViewer from "./pages/ScenarioViewer/ScenarioViewer";
 
 function App() {
   return (
-    <Router basename="/calculator">
+    <Router basename="/">
       <CalculationStorageProvider>
         <Routes>
           <Route path="/" element={<CalculatorPage />} />
