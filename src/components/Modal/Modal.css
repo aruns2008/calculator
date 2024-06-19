@@ -36,6 +36,8 @@
 
   .modal-content {
     margin-top: 20px;
+    position: unset;
+    border: none;
   }
   .modal-overlay.pdf-modal .modal {
     padding: 0;

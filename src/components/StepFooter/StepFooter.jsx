@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./StepFooter.css";
 import { useNavigate } from "react-router-dom";
 import { useCalculationStorage } from "../../context/StorageContext";
-const StepFooter = ({ currentStep = 1, from }) => {  
+const StepFooter = ({ currentStep = 1, from }) => {
   const {
     fpValues,
     stepsCompleted,
@@ -14,8 +14,31 @@ const StepFooter = ({ currentStep = 1, from }) => {
     handleChange,
     accountValue,
     getCalculationDataValue,
+    calculationData,
   } = useCalculationStorage();
   const navigate = useNavigate();
+  const [allowCreation, setAllowCreation] = useState(false);
+  useEffect(() => {  
+    if (from && from === "estimated-results") {
+      const accountValues = getCalculationDataValue("account-value") || [];
+      let vacantIndex = -1;
+      for (let i = 0; i < 2; i++) {
+        if (accountValues[i] === "" || accountValues[i] === undefined) {
+          vacantIndex = i;
+          break;
+        }
+      }
+      if (vacantIndex !== -1) {
+        setAllowCreation(true);
+      }
+    } else {
+      setAllowCreation(false);
+    }
+  }, [index, calculationData]);
+
+  useEffect(() => {
+    console.log("allowCreation", allowCreation);
+  }, [allowCreation]);
   const stepLabels = {
     1: "Financial Professional Fee",
     2: "Financial Professional Fee",
@@ -39,9 +62,23 @@ const StepFooter = ({ currentStep = 1, from }) => {
     }
 
     if (from && from === "estimated-results") {
+      const accountValues = getCalculationDataValue("account-value") || [];
+      const calculationLength = accountValues.length;
       if (index < 2) {
         setIndex(index + 1);
         navigate("/");
+      } else if (index === 2) {
+        let vacantIndex = -1;
+        for (let i = 0; i < 2; i++) {
+          if (accountValues[i] === "" || accountValues[i] === undefined) {
+            vacantIndex = i;
+            break;
+          }
+        }
+        if (vacantIndex !== -1) {
+          setIndex(vacantIndex);
+          navigate("/");
+        }
       }
     }
   };
@@ -52,7 +89,11 @@ const StepFooter = ({ currentStep = 1, from }) => {
 
   return (
     <div className="step-footer">
-    {from != "estimated-results" ? <div className="step-info">{stepLabels[currentStep]}</div> : <div className="step-info"></div>}
+      {from != "estimated-results" ? (
+        <div className="step-info">{stepLabels[currentStep]}</div>
+      ) : (
+        <div className="step-info"></div>
+      )}
       {/* <div className="result step-info">
         <span>Financial Professional Fee</span>        
         <span>{`Rate: ${
@@ -67,16 +108,16 @@ const StepFooter = ({ currentStep = 1, from }) => {
         }`}</span>
       </div> */}
       <div className="step-actions">
-        
         <div className="step-cancel" onClick={handleCancel}>
           Cancel
-        </div><div className={`step-cancel`} onClick={handleBack}>
+        </div>
+        <div className={`step-cancel`} onClick={handleBack}>
           Back
         </div>
         <div
           className={`step-save ${
             stepsCompleted !== true ||
-            (from == "estimated-results" && index >= 2)
+            (from == "estimated-results" && !allowCreation)
               ? "disabled"
               : ""
           }`}

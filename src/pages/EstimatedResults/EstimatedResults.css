@@ -478,7 +478,7 @@ span {
       font-size: 14px;
       font-weight: 500;
       line-height: 20px;
-
+      cursor: pointer;
       padding: 0px 8px 0px 8px;
       border-radius: 0px 2px 2px 0px;
       background: rgba(220, 227, 232, 1);
