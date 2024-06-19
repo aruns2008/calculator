@@ -28,8 +28,10 @@ const StepFooter = ({ currentStep = 1, from }) => {
           break;
         }
       }
-      
+
       if (vacantIndex !== -1) {
+        setAllowCreation(true);
+      } else if (index < 2) {
         setAllowCreation(true);
       }
     } else {
@@ -46,8 +48,10 @@ const StepFooter = ({ currentStep = 1, from }) => {
           break;
         }
       }
-      
+
       if (vacantIndex !== -1) {
+        setAllowCreation(true);
+      } else if (index < 2) {
         setAllowCreation(true);
       }
     } else {
@@ -55,7 +59,9 @@ const StepFooter = ({ currentStep = 1, from }) => {
     }
   }, []);
 
-  useEffect(()=>{console.log(allowCreation,"allowCreation");},[allowCreation])
+  useEffect(() => {
+    console.log(allowCreation, "allowCreation");
+  }, [allowCreation]);
 
   const stepLabels = {
     1: "Financial Professional Fee",
@@ -82,6 +88,7 @@ const StepFooter = ({ currentStep = 1, from }) => {
     if (from && from === "estimated-results") {
       const accountValues = getCalculationDataValue("account-value") || [];
       const calculationLength = accountValues.length;
+      console.log("index is ", index);
       if (index < 2) {
         setIndex(index + 1);
         navigate("/");
