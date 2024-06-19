@@ -19,7 +19,7 @@ const StepFooter = ({ currentStep = 1, from }) => {
   const navigate = useNavigate();
   const [allowCreation, setAllowCreation] = useState(false);
   useEffect(() => {
-    if (from && from === "estimated-results") {      
+    if (from && from === "estimated-results") {
       const accountValues = getCalculationDataValue("account-value") || [];
       let vacantIndex = -1;
       for (let i = 0; i < 2; i++) {
@@ -28,15 +28,34 @@ const StepFooter = ({ currentStep = 1, from }) => {
           break;
         }
       }
-      if (vacantIndex !== -1) {        
-        setAllowCreation(true);
-      } else if (index < 2) {
+      
+      if (vacantIndex !== -1) {
         setAllowCreation(true);
       }
     } else {
       setAllowCreation(false);
     }
   }, [index, calculationData]);
+  useEffect(() => {
+    if (from && from === "estimated-results") {
+      const accountValues = getCalculationDataValue("account-value") || [];
+      let vacantIndex = -1;
+      for (let i = 0; i < 2; i++) {
+        if (accountValues[i] === "" || accountValues[i] === undefined) {
+          vacantIndex = i;
+          break;
+        }
+      }
+      
+      if (vacantIndex !== -1) {
+        setAllowCreation(true);
+      }
+    } else {
+      setAllowCreation(false);
+    }
+  }, []);
+
+  useEffect(()=>{console.log(allowCreation,"allowCreation");},[allowCreation])
 
   const stepLabels = {
     1: "Financial Professional Fee",

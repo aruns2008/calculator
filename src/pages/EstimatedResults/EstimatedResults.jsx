@@ -68,10 +68,28 @@ const EstimatedResults = () => {
   };
 
   const handleNewEstimate = () => {
+    const accountValues = getCalculationDataValue("account-value") || [];
+    const calculationLength = accountValues.length;
     if (index < 2) {
       setIndex(index + 1);
       navigate("/");
+    } else if (index === 2) {
+      let vacantIndex = -1;
+      for (let i = 0; i < 2; i++) {
+        if (accountValues[i] === "" || accountValues[i] === undefined) {
+          vacantIndex = i;
+          break;
+        }
+      }
+      if (vacantIndex !== -1) {
+        setIndex(vacantIndex);
+        navigate("/");
+      }
     }
+    // if (index < 2) {
+    //   setIndex(index + 1);
+    //   navigate("/");
+    // }
   };
 
   const tableArray = numberToArray(index);
@@ -104,11 +122,11 @@ const EstimatedResults = () => {
   const [shareType, setShareType] = useState();
   const handlePdfGeneration = (type, index) => {
     setShowPdf(true);
-    setPdfType(type);    
+    setPdfType(type);
     setShowPDFModal(false);
   };
   const formatId = (name) => name.replace(/\s+/g, "");
-  
+
   const handleShare = async (index, type) => {
     setShareIndex(index);
     setShareType(type);
@@ -129,14 +147,14 @@ const EstimatedResults = () => {
     let data = {};
     if (shareType === "group-scenario") {
       scenarioName = getCalculationDataValue("scenario-name")[0] || "test";
-     const AUAdiscount = getCalculationDataValue("AdditionalDetails");
-     const scenarioNames = getCalculationDataValue("scenario-name");
+      const AUAdiscount = getCalculationDataValue("AdditionalDetails");
+      const scenarioNames = getCalculationDataValue("scenario-name");
       const formattedId = formatId(scenarioName);
       data = {
         name: scenarioName,
         id: formattedId,
         fpValues: fpValues,
-        scenarios:scenarioNames,
+        scenarios: scenarioNames,
         accountValue: accountValue,
         fundExpenses: fundExpenses,
         fpPayout: fpPayout,
@@ -149,8 +167,7 @@ const EstimatedResults = () => {
         totalClientFeeValues: totalClientFeeValues,
         grossAnnualFeeValues: grossAnnualFeeValues,
         netAnnualFeeValues: netAnnualFeeValues,
-        AUAdiscount:AUAdiscount,
-
+        AUAdiscount: AUAdiscount,
       };
     } else {
       scenarioName =
@@ -160,7 +177,7 @@ const EstimatedResults = () => {
         name: scenarioName,
         id: formattedId,
         fpValues: fpValues[shareIndex],
-        scenarios:scenarioName,
+        scenarios: scenarioName,
         accountValue: accountValue[shareIndex],
         fundExpenses: fundExpenses[shareIndex],
         fpPayout: fpPayout[shareIndex],
@@ -172,7 +189,7 @@ const EstimatedResults = () => {
         totalAccountFeeValues: totalAccountFeeValues[shareIndex],
         totalClientFeeValues: totalClientFeeValues[shareIndex],
         grossAnnualFeeValues: grossAnnualFeeValues[shareIndex],
-        netAnnualFeeValues: netAnnualFeeValues[shareIndex],        
+        netAnnualFeeValues: netAnnualFeeValues[shareIndex],
       };
     }
 
@@ -189,7 +206,7 @@ const EstimatedResults = () => {
         />
       </div>
       <div className="results-section">
-        <div className="pdf-sectionn">  
+        <div className="pdf-sectionn">
           <ExportToPDF
             dates={dates}
             showPdf={showPdf}
@@ -197,7 +214,7 @@ const EstimatedResults = () => {
             pdfIndex={pdfIndex}
             setShowPdf={setShowPdf}
             setPdfType={setPdfType}
-            setPdfIndex={setPdfIndex}            
+            setPdfIndex={setPdfIndex}
           />
         </div>
         <div className="section-container">
@@ -263,7 +280,7 @@ const EstimatedResults = () => {
                     ></Button>
                     <Button
                       text={"Export ▼"}
-                      onClick={()=>handleOpenPDFModal(index)}
+                      onClick={() => handleOpenPDFModal(index)}
                       configuresStyles={"result-button action-button"}
                     ></Button>
                   </div>
