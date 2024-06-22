@@ -32,7 +32,14 @@ const StepFooter = ({ currentStep = 1, from }) => {
       if (vacantIndex !== -1) {
         setAllowCreation(true);
       } else if (index < 2) {
-        setAllowCreation(true);
+        if (
+          (index === 0 &&
+            (accountValues[1] === "" || accountValues[1] === undefined)) ||
+          (index === 1 &&
+            (accountValues[2] === "" || accountValues[2] === undefined))
+        ) {
+          setAllowCreation(true);
+        }
       }
     } else {
       setAllowCreation(false);
@@ -52,7 +59,14 @@ const StepFooter = ({ currentStep = 1, from }) => {
       if (vacantIndex !== -1) {
         setAllowCreation(true);
       } else if (index < 2) {
-        setAllowCreation(true);
+        if (
+          (index === 0 &&
+            (accountValues[1] === "" || accountValues[1] === undefined)) ||
+          (index === 1 &&
+            (accountValues[2] === "" || accountValues[2] === undefined))
+        ) {
+          setAllowCreation(true);
+        }
       }
     } else {
       setAllowCreation(false);
@@ -88,10 +102,18 @@ const StepFooter = ({ currentStep = 1, from }) => {
     if (from && from === "estimated-results") {
       const accountValues = getCalculationDataValue("account-value") || [];
       const calculationLength = accountValues.length;
-      console.log("index is ", index);
       if (index < 2) {
-        setIndex(index + 1);
-        navigate("/");
+        // setIndex(index + 1);
+        // navigate("/");
+        if (
+          (index === 0 &&
+            (accountValues[1] === "" || accountValues[1] === undefined)) ||
+          (index === 1 &&
+            (accountValues[2] === "" || accountValues[2] === undefined))
+        ) {
+          setIndex(index + 1);
+          navigate("/");
+        }
       } else if (index === 2) {
         let vacantIndex = -1;
         for (let i = 0; i < 2; i++) {

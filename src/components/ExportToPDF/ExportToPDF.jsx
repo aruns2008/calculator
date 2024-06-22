@@ -243,21 +243,34 @@ const ExportToPDF = ({
                       Strategist Fee (if applicable)
                     </div>
                     <div className="header-labels">
-                      {strategistFeeValues &&
-                        strategistFeeValues.map((value, idx) => (
-                          <React.Fragment key={idx}>
-                            <div className="input-values">
-                              {value && value.rate && value.rate !== "N/A"
-                                ? `${Number(value.rate).toLocaleString()}%`
-                                : "N/A"}
-                            </div>
-                            <div className="input-values">
-                              {value && value.price && value.price !== "N/A"
-                                ? `$${Number(value.price).toLocaleString()}`
-                                : "N/A"}
-                            </div>
-                          </React.Fragment>
-                        ))}
+                      {calculationData["account-value"] &&
+                        calculationData["account-value"].map(
+                          (accValue, idx) => {
+                            const feeValue = strategistFeeValues[idx] || {
+                              rate: "N/A",
+                              price: "N/A",
+                            };
+
+                            return (
+                              <React.Fragment key={idx}>
+                                <div className="input-values">
+                                  {feeValue.rate && feeValue.rate !== "N/A"
+                                    ? `${Number(
+                                        feeValue.rate
+                                      ).toLocaleString()}%`
+                                    : "N/A"}
+                                </div>
+                                <div className="input-values">
+                                  {feeValue.price && feeValue.price !== "N/A"
+                                    ? `$${Number(
+                                        feeValue.price
+                                      ).toLocaleString()}`
+                                    : "N/A"}
+                                </div>
+                              </React.Fragment>
+                            );
+                          }
+                        )}
                     </div>
                   </div>
 
@@ -266,21 +279,34 @@ const ExportToPDF = ({
                       Total Account Fee (annualized)
                     </div>
                     <div className="header-labels">
-                      {totalAccountFeeValues &&
-                        totalAccountFeeValues.map((value, idx) => (
-                          <React.Fragment key={idx}>
-                            <div className="input-values">
-                              {value && value.rate && value.rate !== "N/A"
-                                ? `${Number(value.rate).toLocaleString()}%`
-                                : "N/A"}
-                            </div>
-                            <div className="input-values">
-                              {value && value.price && value.price !== "N/A"
-                                ? `$${Number(value.price).toLocaleString()}`
-                                : "N/A"}
-                            </div>
-                          </React.Fragment>
-                        ))}
+                      {calculationData["account-value"] &&
+                        calculationData["account-value"].map(
+                          (accValue, idx) => {
+                            const feeValue = totalAccountFeeValues[idx] || {
+                              rate: "N/A",
+                              price: "N/A",
+                            };
+
+                            return (
+                              <React.Fragment key={idx}>
+                                <div className="input-values">
+                                  {feeValue.rate && feeValue.rate !== "N/A"
+                                    ? `${Number(
+                                        feeValue.rate
+                                      ).toLocaleString()}%`
+                                    : "N/A"}
+                                </div>
+                                <div className="input-values">
+                                  {feeValue.price && feeValue.price !== "N/A"
+                                    ? `$${Number(
+                                        feeValue.price
+                                      ).toLocaleString()}`
+                                    : "N/A"}
+                                </div>
+                              </React.Fragment>
+                            );
+                          }
+                        )}
                     </div>
                   </div>
                   <div className="field-container">

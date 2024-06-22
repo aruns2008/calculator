@@ -14,7 +14,7 @@ const AdditionalDetail = ({
 
   // State for the WealthPort AUA discount selection
   const [selectedDiscount, setSelectedDiscount] = useState(
-    getCalculationDataValue("AdditionalDetails")[index]?.auaDiscount || "0%"
+    getCalculationDataValue("AdditionalDetails")[index]?.auaDiscount
   );
   const [fundExpenses, setFundExpenses] = useState(
     getCalculationDataValue("AdditionalDetails")[index]?.fundExpenses

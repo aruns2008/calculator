@@ -2,7 +2,6 @@ import React from "react";
 import "./Radio.css";
 
 const CustomRadioInput = ({ selectedValue, value, onchange, name,placeholder }) => { 
-  
   let formatedValue;
   if (typeof value === 'string' && value.includes('%')) {
     formatedValue = value.replace('%', '');
