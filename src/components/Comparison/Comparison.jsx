@@ -190,6 +190,7 @@ const Comparison = ({ handlePdfGeneration, handleShare }) => {
             <div className="header-labels">
               {calculationData["account-value"] &&
                 calculationData["account-value"].map((accValue, idx) => {
+                  if (accValue === "") return null;
                   const feeValue = strategistFeeValues[idx] || {
                     rate: "N/A",
                     price: "N/A",
@@ -226,6 +227,7 @@ const Comparison = ({ handlePdfGeneration, handleShare }) => {
             <div className="header-labels">
               {calculationData["account-value"] &&
                 calculationData["account-value"].map((accValue, idx) => {
+                  if (accValue === "") return null;
                   const feeValue = totalAccountFeeValues[idx] || {
                     rate: "N/A",
                     price: "N/A",

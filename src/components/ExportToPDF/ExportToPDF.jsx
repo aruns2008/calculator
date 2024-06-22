@@ -246,6 +246,7 @@ const ExportToPDF = ({
                       {calculationData["account-value"] &&
                         calculationData["account-value"].map(
                           (accValue, idx) => {
+                            if (accValue === "") return null;
                             const feeValue = strategistFeeValues[idx] || {
                               rate: "N/A",
                               price: "N/A",
@@ -282,6 +283,7 @@ const ExportToPDF = ({
                       {calculationData["account-value"] &&
                         calculationData["account-value"].map(
                           (accValue, idx) => {
+                            if (accValue === "") return null;
                             const feeValue = totalAccountFeeValues[idx] || {
                               rate: "N/A",
                               price: "N/A",
