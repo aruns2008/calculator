@@ -1,11 +1,11 @@
 import AWS from 'aws-sdk';
 
 // Set AWS credentials and region (Note: Secure credentials in production)
-// AWS.config.update({
-//   accessKeyId: 'AKIARZF7DL3WVMZIQG4N',
-//   secretAccessKey: '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',
-//   region: 'ap-south-1',
-// });
+AWS.config.update({
+  accessKeyId: 'AKIARZF7DL3WVMZIQG4N',
+  secretAccessKey: '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',
+  region: 'ap-south-1',
+});
 
 const docClient = new AWS.DynamoDB.DocumentClient();
 const dynamoDB = new AWS.DynamoDB();  // This is used for table-related operations
