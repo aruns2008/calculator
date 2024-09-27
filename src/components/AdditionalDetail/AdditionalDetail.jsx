@@ -14,7 +14,7 @@ const AdditionalDetail = ({
 
   // State for the WealthPort AUA discount selection
   const [selectedDiscount, setSelectedDiscount] = useState(
-    getCalculationDataValue("AdditionalDetails")[index]?.auaDiscount || "0%"
+    getCalculationDataValue("AdditionalDetails")[index]?.auaDiscount
   );
   const [fundExpenses, setFundExpenses] = useState(
     getCalculationDataValue("AdditionalDetails")[index]?.fundExpenses
@@ -148,7 +148,7 @@ const AdditionalDetail = ({
               selectedValue={selectedDiscount}
               value={discount}
               onchange={handleDiscountChange}
-              name="auaDiscount"
+              name="auaDiscount"             
             />
             {/* <input type="radio" id="Red" name="colors" value="Red"></input> */}
             <span className="discount-value">{discount}</span>

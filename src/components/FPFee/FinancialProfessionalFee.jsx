@@ -37,10 +37,10 @@ const FinancialProfessionalFee = ({
 
   // Function to update tierValueSum and breakPointValueSum based on index
   const [flatValue, setFlatValue] = useState(
-    getCalculationDataValue("FPfeeFlat")[index] || ""
+    getCalculationDataValue("FPfeeFlat")[index]?.amount || ""
   );
   const [fixedValue, setFixedValue] = useState(
-    getCalculationDataValue("FPfeeFixed")[index] || ""
+    getCalculationDataValue("FPfeeFixed")[index]?.amount || ""
   );
 
   // useEffect to initialize the input value

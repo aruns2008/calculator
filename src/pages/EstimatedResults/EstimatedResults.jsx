@@ -11,7 +11,7 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { storeData, retrieveData } from "../../utils/dynamoDB";
 import formatDate from "../../utils/dateFormatter";
 import { useParams } from "react-router-dom";
-const EstimatedResults = () => {
+const EstimatedResults = () => {  
   const navigate = useNavigate();
   const { scenarioId } = useParams();
   const {
@@ -68,10 +68,35 @@ const EstimatedResults = () => {
   };
 
   const handleNewEstimate = () => {
-    if (index < 2) {
-      setIndex(index + 1);
-      navigate("/");
+    const accountValues = getCalculationDataValue("account-value") || [];
+    const calculationLength = accountValues.length;
+    if (index < 2) {     
+      if (
+        (index === 0 &&
+          (accountValues[1] === "" || accountValues[1] === undefined)) ||
+        (index === 1 &&
+          (accountValues[2] === "" || accountValues[2] === undefined))
+      ) {
+        setIndex(index + 1);
+        navigate("/");
+      }
+    } else if (index === 2) {
+      let vacantIndex = -1;
+      for (let i = 0; i < 2; i++) {
+        if (accountValues[i] === "" || accountValues[i] === undefined) {
+          vacantIndex = i;
+          break;
+        }
+      }
+      if (vacantIndex !== -1) {
+        setIndex(vacantIndex);
+        navigate("/");
+      }
     }
+    // if (index < 2) {
+    //   setIndex(index + 1);
+    //   navigate("/");
+    // }
   };
 
   const tableArray = numberToArray(index);
@@ -93,8 +118,9 @@ const EstimatedResults = () => {
     setDeleteIndex("");
     setShareModal(false);
   };
-  const handleOpenPDFModal = () => {
+  const handleOpenPDFModal = (index) => {
     setShowPDFModal(true);
+    setPdfIndex(index);
   };
   const [showPdf, setShowPdf] = useState(false);
   const [pdfType, setPdfType] = useState("");
@@ -104,102 +130,51 @@ const EstimatedResults = () => {
   const handlePdfGeneration = (type, index) => {
     setShowPdf(true);
     setPdfType(type);
-    setPdfIndex(index);
     setShowPDFModal(false);
   };
   const formatId = (name) => name.replace(/\s+/g, "");
+
   // const handleShare = async (index, type) => {
-  //   console.log("type",type)
+  //   setShareIndex(index);
+  //   setShareType(type);
   //   const currentDate = new Date();
   //   setShareDate(formatDate(currentDate));
-  //   if (
-  //     getCalculationDataValue("scenario-name")[index] &&
-  //     getCalculationDataValue("scenario-name")[index] !== ""
-  //   ) {
-  //     setLink(
-  //       "http://localhost:3000/scenario-viewer?scenarioId=" +
-  //       formatId(getCalculationDataValue("scenario-name")[index])
-  //     );
-  //   } else {
-  //     setLink("http://localhost:3000/scenario-viewer?scenarioId=" + "test");
-  //   }
-
+  //   const scenarioName =
+  //     getCalculationDataValue("scenario-name")[index] || "test";
+  //   setLink(
+  //     `http://localhost:3001/scenario-viewer?scenarioId=${formatId(
+  //       scenarioName
+  //     )}`
+  //   );
   //   setShareModal(true);
-  //   const data1 = {
-  //     name: getCalculationDataValue("scenario-name")[index] || "test",
-  //     id:formatId(getCalculationDataValue("scenario-name")[index] || "test"),
-  //     fpValues: fpValues[index],
-  //     accountValue: accountValue[index],
-  //     fundExpenses: fundExpenses[index],
-  //     fpPayout: fpPayout[index],
-  //     houseHoldValue: houseHoldValue[index],
-  //     feeType: feeType[index],
-  //     programFee: programFee[index],
-  //     programFeeValues: programFeeValues[index],
-  //     strategistFeeValues: strategistFeeValues[index],
-  //     totalAccountFeeValues: totalAccountFeeValues[index],
-  //     totalClientFeeValues: totalClientFeeValues[index],
-  //     grossAnnualFeeValues: grossAnnualFeeValues[index],
-  //     netAnnualFeeValues: netAnnualFeeValues[index],
-  //   };
-  //   const data2 = {
-  //     name: getCalculationDataValue("scenario-name")[0] || "test",
-  //     id:formatId(getCalculationDataValue("scenario-name")[index] || "test"),
-  //     fpValues: fpValues,
-  //     accountValue: accountValue,
-  //     fundExpenses: fundExpenses,
-  //     fpPayout: fpPayout,
-  //     houseHoldValue: houseHoldValue,
-  //     feeType: feeType,
-  //     programFee: programFee,
-  //     programFeeValues: programFeeValues,
-  //     strategistFeeValues: strategistFeeValues,
-  //     totalAccountFeeValues: totalAccountFeeValues,
-  //     totalClientFeeValues: totalClientFeeValues,
-  //     grossAnnualFeeValues: grossAnnualFeeValues,
-  //     netAnnualFeeValues: netAnnualFeeValues,
-  //   };
-  //   // Store data
-  //   if(type === "group-scenario"){
-  //     await storeData(data2);
-  //   } else {
-  //     await storeData(data1);
-  //   }
-
-  //   // Retrieve data
-  //   const retrievedData = await retrieveData(data2.name);
-  //   console.log(retrievedData);
   // };
+
   const handleShare = async (index, type) => {
     setShareIndex(index);
     setShareType(type);
     const currentDate = new Date();
-    setShareDate(formatDate(currentDate));
-    const scenarioName =
-      getCalculationDataValue("scenario-name")[index] || "test";
-    setLink(
-      `http://localhost:3000/scenario-viewer?scenarioId=${formatId(
-        scenarioName
-      )}`
-    );
+    setShareDate(formatDate(currentDate));  
+    const scenarioName = getCalculationDataValue("scenario-name")[index] || "test";
+    const baseURL = window.location.origin;
+    const shareLink = `${baseURL}/scenario-viewer?scenarioId=${formatId(scenarioName)}`;
+    setLink(shareLink);
     setShareModal(true);
   };
+  
 
-  const handleAgreeAndContinue = async () => {
+  const handleAgreeAndContinue = async () => {    
     let scenarioName = "";
     let data = {};
-    
-
     if (shareType === "group-scenario") {
       scenarioName = getCalculationDataValue("scenario-name")[0] || "test";
-     const AUAdiscount = getCalculationDataValue("AdditionalDetails");
-     const scenarioNames = getCalculationDataValue("scenario-name");
+      const AUAdiscount = getCalculationDataValue("AdditionalDetails");
+      const scenarioNames = getCalculationDataValue("scenario-name");
       const formattedId = formatId(scenarioName);
       data = {
         name: scenarioName,
         id: formattedId,
         fpValues: fpValues,
-        scenarios:scenarioNames,
+        scenarios: scenarioNames,
         accountValue: accountValue,
         fundExpenses: fundExpenses,
         fpPayout: fpPayout,
@@ -212,8 +187,7 @@ const EstimatedResults = () => {
         totalClientFeeValues: totalClientFeeValues,
         grossAnnualFeeValues: grossAnnualFeeValues,
         netAnnualFeeValues: netAnnualFeeValues,
-        AUAdiscount:AUAdiscount,
-
+        AUAdiscount: AUAdiscount,
       };
     } else {
       scenarioName =
@@ -223,7 +197,7 @@ const EstimatedResults = () => {
         name: scenarioName,
         id: formattedId,
         fpValues: fpValues[shareIndex],
-        scenarios:scenarioName,
+        scenarios: scenarioName,
         accountValue: accountValue[shareIndex],
         fundExpenses: fundExpenses[shareIndex],
         fpPayout: fpPayout[shareIndex],
@@ -235,7 +209,7 @@ const EstimatedResults = () => {
         totalAccountFeeValues: totalAccountFeeValues[shareIndex],
         totalClientFeeValues: totalClientFeeValues[shareIndex],
         grossAnnualFeeValues: grossAnnualFeeValues[shareIndex],
-        netAnnualFeeValues: netAnnualFeeValues[shareIndex],        
+        netAnnualFeeValues: netAnnualFeeValues[shareIndex],
       };
     }
 
@@ -326,7 +300,7 @@ const EstimatedResults = () => {
                     ></Button>
                     <Button
                       text={"Export ▼"}
-                      onClick={handleOpenPDFModal}
+                      onClick={() => handleOpenPDFModal(index)}
                       configuresStyles={"result-button action-button"}
                     ></Button>
                   </div>
@@ -343,7 +317,7 @@ const EstimatedResults = () => {
                   </div>
 
                   <div className="results-divider sub"></div>
-                  <div className="row">
+                  <div className="estimated-results-item">
                     <div className="label">Financial Professional Fee</div>
                     <div className="value-container">
                       <div className="value">
@@ -361,7 +335,7 @@ const EstimatedResults = () => {
                     </div>
                   </div>
                   <div className="results-divider"></div>
-                  <div className="row">
+                  <div className="estimated-results-item">
                     <div className="label">Program Fee</div>
 
                     <div className="value-container">
@@ -382,7 +356,7 @@ const EstimatedResults = () => {
                     </div>
                   </div>
                   <div className="results-divider"></div>
-                  <div className="row">
+                  <div className="estimated-results-item">
                     <div className="label">Strategist Fee (if applicable)</div>
 
                     <div className="value-container">
@@ -406,7 +380,7 @@ const EstimatedResults = () => {
                   </div>
 
                   <div className="results-divider"></div>
-                  <div className="row">
+                  <div className="estimated-results-item">
                     <div className="label">Total Account Fee (annualized)</div>
 
                     <div className="value-container">
@@ -429,7 +403,7 @@ const EstimatedResults = () => {
                     </div>
                   </div>
                   <div className="results-divider"></div>
-                  <div className="row">
+                  <div className="estimated-results-item">
                     <div className="label">
                       Total Client Fees (including Fund Expenses)
                     </div>
@@ -457,7 +431,7 @@ const EstimatedResults = () => {
                     </div>
                   </div>
                   <div className="results-divider"></div>
-                  <div className="row">
+                  <div className="estimated-results-item">
                     <div className="label">
                       Gross Annual Fee to Financial Professional
                     </div>
@@ -483,7 +457,7 @@ const EstimatedResults = () => {
                     </div>
                   </div>
                   <div className="results-divider"></div>
-                  <div className="row">
+                  <div className="estimated-results-item">
                     <div className="label">
                       Net Annual Fee to Financial Professional
                     </div>
@@ -507,7 +481,7 @@ const EstimatedResults = () => {
                     </div>
                   </div>
                   <div className="results-divider"></div>
-                  <div className="row">
+                  <div className="estimated-results-item">
                     <div className="label">Account Value</div>
                     <div className="value-container">
                       <div className="value">
@@ -527,7 +501,7 @@ const EstimatedResults = () => {
                     </div>
                   </div>
                   <div className="results-divider"></div>
-                  <div className="row">
+                  <div className="estimated-results-item">
                     <div className="label">Fund Expenses</div>
                     <div className="value-container">
                       <div className="value">
@@ -541,7 +515,7 @@ const EstimatedResults = () => {
                     </div>
                   </div>
                   <div className="results-divider"></div>
-                  <div className="row">
+                  <div className="estimated-results-item">
                     <div className="label">Financial Professional Payout</div>
                     <div className="value-container">
                       <div className="value">
@@ -553,7 +527,7 @@ const EstimatedResults = () => {
                     </div>
                   </div>
                   <div className="results-divider"></div>
-                  <div className="row">
+                  <div className="estimated-results-item">
                     <div className="label">Household Value</div>
                     <div className="value-container">
                       <div className="value">
@@ -567,7 +541,7 @@ const EstimatedResults = () => {
                     </div>
                   </div>
                   <div className="results-divider"></div>
-                  <div className="row">
+                  <div className="estimated-results-item">
                     <div className="label">Fee Type</div>
                     <div className="value-container types">
                       <div className="value">{feeType[index] || "N/A"}</div>

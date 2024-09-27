@@ -2,7 +2,9 @@
   "name": "custom-calculator",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://aruns2008.github.io/results",
+
+  "homepage": "https://aruns2008.github.io/calculator",
+
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
@@ -12,8 +14,11 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "aws-sdk": "^2.1640.0",
+    "cross-env": "^7.0.3",
     "html2canvas": "^1.4.1",
     "jspdf": "^2.5.1",
+    "python": "^0.0.4",
+    "python3": "^0.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.23.1",
@@ -22,7 +27,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "cross-env PORT=3001 react-scripts start",
     "build": "react-scripts build",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",

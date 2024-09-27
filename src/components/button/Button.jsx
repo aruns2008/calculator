@@ -1,4 +1,5 @@
 import Styles from "./button.module.css";
+import React from "react";
 
 const Button = ({ text, onClick, configuresStyles }) => {
   return (

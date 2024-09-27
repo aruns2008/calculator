@@ -58,9 +58,9 @@ const CalculationStorageProvider = ({ children }) => {
     "account-value": [""],
     FPfee: [{}],
     AdditionalDetails: [
-      { auaDiscount: "0%", fpPayOut: "", fundExpenses: "", houseHoldValue: "" },
-      { auaDiscount: "0%", fpPayOut: "", fundExpenses: "", houseHoldValue: "" },
-      { auaDiscount: "0%", fpPayOut: "", fundExpenses: "", houseHoldValue: "" },
+      { auaDiscount: "0", fpPayOut: "", fundExpenses: "", houseHoldValue: "" },
+      { auaDiscount: "0", fpPayOut: "", fundExpenses: "", houseHoldValue: "" },
+      { auaDiscount: "0", fpPayOut: "", fundExpenses: "", houseHoldValue: "" },
     ],
     paymentOption: ["", "", ""],
     programOption: [""],
@@ -312,45 +312,6 @@ const CalculationStorageProvider = ({ children }) => {
     replaceValueAtIndex(stateArray, setStateFunction, index);
   };
 
-  useEffect(() => {
-    console.log(calculationData);
-  }, [calculationData]);
-  useEffect(() => {
-    console
-      .log
-      //   tierValueSum,
-      //   breakPointValueSum,
-      //    accountValue,
-      //   fundExpenses,
-      //   fpPayout,
-      //   houseHoldValue,
-      //   feeType,
-      //   programFee,
-      //   programFeeValues,
-      //   strategistFeeValues,
-      //   totalAccountFeeValues,
-      //   grossAnnualFeeValues,
-      //   fpValues,
-      //   netAnnualFeeValues,
-      //totalClientFeeValues
-      ();
-  }, [
-    tierValueSum,
-    breakPointValueSum,
-    accountValue,
-    fundExpenses,
-    fpPayout,
-    houseHoldValue,
-    feeType,
-    programFee,
-    programFeeValues,
-    strategistFeeValues,
-    totalAccountFeeValues,
-    grossAnnualFeeValues,
-    fpValues,
-    netAnnualFeeValues,
-    totalClientFeeValues,
-  ]);
 
   return (
     <CalculationStorageContext.Provider

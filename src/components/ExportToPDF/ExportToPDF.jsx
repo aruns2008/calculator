@@ -4,7 +4,6 @@ import html2canvas from "html2canvas";
 import "./ExportToPDF.css";
 import { useCalculationStorage } from "../../context/StorageContext";
 
-
 const ExportToPDF = ({
   dates,
   showPdf,
@@ -40,46 +39,17 @@ const ExportToPDF = ({
     }
   }, [showPdf]);
 
-  // const handlePrint = () => {
-  //   const input = printRef.current;
-  //   const originalDisplay = input.style.display;
-  //   input.style.display = "block";
-  //   html2canvas(input, { scale: 1 }).then((canvas) => {
-  //     const imgData = canvas.toDataURL("image/png");
-  //     const pdf = new jsPDF("p", "mm", "a4");
-  //     const imgWidth = 210; // A4 width in mm
-  //     const pageHeight = 295; // A4 height in mm
-  //     const imgHeight = (canvas.height * imgWidth) / canvas.width;
-  //     let heightLeft = imgHeight;
-  //     let position = 0;
-
-  //     pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-  //     heightLeft -= pageHeight;
-
-  //     while (heightLeft >= 0) {
-  //       position = heightLeft - imgHeight;
-  //       pdf.addPage();
-  //       pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-  //       heightLeft -= pageHeight;
-  //     }
-
-  //     pdf.save("download.pdf");
-  //     input.style.display = originalDisplay;
-  //     setShowPdf(false);
-  //     setPdfType("");
-  //     setPdfIndex("");
-  //   });
-  // };
   const handlePrint = () => {
     const input = printRef.current;
     const originalDisplay = input.style.display;
     input.style.display = "block";
-  
+
     // Add a temporary style to center the content and adjust padding
     input.style.padding = "20px";
-    input.style.width = "80%";
+    input.style.width = "100%";
+    input.style.maxWidth = "800px";
     input.style.margin = "auto";
-  
+
     html2canvas(input, { scale: 2 }).then((canvas) => {
       const imgData = canvas.toDataURL("image/png");
       const pdf = new jsPDF("p", "mm", "a4");
@@ -88,31 +58,31 @@ const ExportToPDF = ({
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
       let heightLeft = imgHeight;
       let position = 0;
-  
+
       pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
       heightLeft -= pageHeight;
-  
+
       while (heightLeft > 0) {
         position = heightLeft - imgHeight;
         pdf.addPage();
         pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
         heightLeft -= pageHeight;
       }
-  
+
       pdf.save("download.pdf");
-  
+
       // Revert the styles back to original
       input.style.display = originalDisplay;
       input.style.padding = "";
       input.style.width = "";
       input.style.margin = "";
-  
+
       setShowPdf(false);
       setPdfType("");
       setPdfIndex("");
     });
   };
-  
+
   const renderValue = (value) => {
     if (value)
       return (
@@ -120,17 +90,45 @@ const ExportToPDF = ({
       );
   };
 
+  const getCurrentDate = () => {
+    const date = new Date();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    const year = date.getFullYear();
+    return `${month}-${day}-${year}`;
+  };
+
+  const safeIndex =
+    Array.isArray(getCalculationDataValue("scenario-name")) &&
+    index < getCalculationDataValue("scenario-name").length
+      ? index
+      : null;
+  const safeDateIndex =
+    Array.isArray(dates) && index < dates.length ? index : null;
+
+  const formatNumber = (number) => {
+    if (typeof number === "number" || !isNaN(Number(number))) {
+      return Number(number).toLocaleString("en-US");
+    }
+    return number;
+  };
   return (
     <div>
-      <div ref={printRef} style={{display:"none"}}>
+      <div ref={printRef} style={{ display: "none" }}>
         <div className="pdf-container">
           <div className="header">
             <div className="title-block">
               <h1>
-                {getCalculationDataValue("scenario-name")[index] ||
+                {(safeIndex !== null &&
+                  getCalculationDataValue("scenario-name")[safeIndex]) ||
                   "Investment Account Fee Estimate 1"}
               </h1>
-              <p>As of Date: {dates[index] ? dates[index] : ""}</p>
+              <p>
+                As of Date:{" "}
+                {safeDateIndex !== null && dates[safeDateIndex]
+                  ? dates[safeDateIndex]
+                  : getCurrentDate()}
+              </p>
             </div>
             <div className="actions">
               <img
@@ -173,7 +171,23 @@ const ExportToPDF = ({
                         )}
                     </div>
                   </div>
+                  <div className="field-container">
+                    <div className="field-name">Account Value</div>
 
+                    <div key={index} className="header-labels">
+                      {calculationData["account-value"] &&
+                        calculationData["account-value"].map((value, idx) =>
+                          renderValue(value) ? (
+                            <div
+                              key={idx}
+                              className="header-label three-column"
+                            >
+                              {`$${formatNumber(value)}`}
+                            </div>
+                          ) : null
+                        )}
+                    </div>
+                  </div>
                   <div className="field-container">
                     <div className="field-name">Financial Professional Fee</div>
                     {fpValues.length > 0 && (
@@ -185,12 +199,12 @@ const ExportToPDF = ({
                               <React.Fragment key={idx}>
                                 <div className="input-values">
                                   {renderValue(value.rate)
-                                    ? `$${value.rate}`
+                                    ? `${Number(value.rate).toLocaleString()}%`
                                     : "N/A"}
                                 </div>
                                 <div className="input-values">
                                   {renderValue(value.price)
-                                    ? `${value.price}%`
+                                    ? `$${Number(value.price).toLocaleString()}`
                                     : "N/A"}
                                 </div>
                               </React.Fragment>
@@ -211,12 +225,12 @@ const ExportToPDF = ({
                               <React.Fragment key={idx}>
                                 <div className="input-values">
                                   {value && renderValue(value.rate)
-                                    ? `${value.rate}%`
+                                    ? `${Number(value.rate).toLocaleString()}%`
                                     : "N/A"}
                                 </div>
                                 <div className="input-values">
                                   {value && renderValue(value.price)
-                                    ? `$${value.price}`
+                                    ? `$${Number(value.price).toLocaleString()}`
                                     : "N/A"}
                                 </div>
                               </React.Fragment>
@@ -229,21 +243,35 @@ const ExportToPDF = ({
                       Strategist Fee (if applicable)
                     </div>
                     <div className="header-labels">
-                      {strategistFeeValues &&
-                        strategistFeeValues.map((value, idx) => (
-                          <React.Fragment key={idx}>
-                            <div className="input-values">
-                              {value && value.rate && value.rate !== "N/A"
-                                ? `${value.rate}%`
-                                : "N/A"}
-                            </div>
-                            <div className="input-values">
-                              {value && value.price && value.price !== "N/A"
-                                ? `$${value.price}`
-                                : "N/A"}
-                            </div>
-                          </React.Fragment>
-                        ))}
+                      {calculationData["account-value"] &&
+                        calculationData["account-value"].map(
+                          (accValue, idx) => {
+                            if (accValue === "") return null;
+                            const feeValue = strategistFeeValues[idx] || {
+                              rate: "N/A",
+                              price: "N/A",
+                            };
+
+                            return (
+                              <React.Fragment key={idx}>
+                                <div className="input-values">
+                                  {feeValue.rate && feeValue.rate !== "N/A"
+                                    ? `${Number(
+                                        feeValue.rate
+                                      ).toLocaleString()}%`
+                                    : "N/A"}
+                                </div>
+                                <div className="input-values">
+                                  {feeValue.price && feeValue.price !== "N/A"
+                                    ? `$${Number(
+                                        feeValue.price
+                                      ).toLocaleString()}`
+                                    : "N/A"}
+                                </div>
+                              </React.Fragment>
+                            );
+                          }
+                        )}
                     </div>
                   </div>
 
@@ -252,21 +280,35 @@ const ExportToPDF = ({
                       Total Account Fee (annualized)
                     </div>
                     <div className="header-labels">
-                      {totalAccountFeeValues &&
-                        totalAccountFeeValues.map((value, idx) => (
-                          <React.Fragment key={idx}>
-                            <div className="input-values">
-                              {value && value.rate && value.rate !== "N/A"
-                                ? `${value.rate}%`
-                                : "N/A"}
-                            </div>
-                            <div className="input-values">
-                              {value && value.price && value.price !== "N/A"
-                                ? `$${value.price}`
-                                : "N/A"}
-                            </div>
-                          </React.Fragment>
-                        ))}
+                      {calculationData["account-value"] &&
+                        calculationData["account-value"].map(
+                          (accValue, idx) => {
+                            if (accValue === "") return null;
+                            const feeValue = totalAccountFeeValues[idx] || {
+                              rate: "N/A",
+                              price: "N/A",
+                            };
+
+                            return (
+                              <React.Fragment key={idx}>
+                                <div className="input-values">
+                                  {feeValue.rate && feeValue.rate !== "N/A"
+                                    ? `${Number(
+                                        feeValue.rate
+                                      ).toLocaleString()}%`
+                                    : "N/A"}
+                                </div>
+                                <div className="input-values">
+                                  {feeValue.price && feeValue.price !== "N/A"
+                                    ? `$${Number(
+                                        feeValue.price
+                                      ).toLocaleString()}`
+                                    : "N/A"}
+                                </div>
+                              </React.Fragment>
+                            );
+                          }
+                        )}
                     </div>
                   </div>
                   <div className="field-container">
@@ -280,12 +322,12 @@ const ExportToPDF = ({
                               <React.Fragment key={idx}>
                                 <div className="input-values">
                                   {renderValue(data?.rate)
-                                    ? `${data.rate}%`
+                                    ? `${Number(data.rate).toLocaleString()}%`
                                     : "N/A"}
                                 </div>
                                 <div className="input-values">
                                   {renderValue(data?.price)
-                                    ? `$${data.price}`
+                                    ? `$${Number(data.price).toLocaleString()}`
                                     : "N/A"}
                                 </div>
                               </React.Fragment>
@@ -307,12 +349,12 @@ const ExportToPDF = ({
                               <React.Fragment key={idx}>
                                 <div className="input-values">
                                   {renderValue(data?.rate)
-                                    ? `${data.rate}%`
+                                    ? `${Number(data.rate).toLocaleString()}%`
                                     : "N/A"}
                                 </div>
                                 <div className="input-values">
                                   {renderValue(data?.price)
-                                    ? `$${data.price}`
+                                    ? `$${Number(data.price).toLocaleString()}`
                                     : "N/A"}
                                 </div>
                               </React.Fragment>
@@ -334,12 +376,12 @@ const ExportToPDF = ({
                               <React.Fragment key={idx}>
                                 <div className="input-values">
                                   {renderValue(data?.rate)
-                                    ? `${data.rate}%`
+                                    ? `${Number(data.rate).toLocaleString()}%`
                                     : "N/A"}
                                 </div>
                                 <div className="input-values">
                                   {renderValue(data?.price)
-                                    ? `$${data.price}`
+                                    ? `$${Number(data.price).toLocaleString()}`
                                     : "N/A"}
                                 </div>
                               </React.Fragment>
@@ -361,12 +403,12 @@ const ExportToPDF = ({
                               <React.Fragment key={idx}>
                                 <div className="input-values">
                                   {renderValue(data?.rate)
-                                    ? `${data.rate}%`
+                                    ? `${Number(data.rate).toLocaleString()}%`
                                     : "N/A"}
                                 </div>
                                 <div className="input-values">
                                   {renderValue(data?.price)
-                                    ? `$${data.price}`
+                                    ? `$${Number(data.price).toLocaleString()}`
                                     : "N/A"}
                                 </div>
                               </React.Fragment>
@@ -389,18 +431,69 @@ const ExportToPDF = ({
                               <React.Fragment key={idx}>
                                 <div className="input-values">
                                   {renderValue(data?.rate)
-                                    ? `${data.rate}%`
+                                    ? `${Number(data.rate).toLocaleString()}%`
                                     : "N/A"}
                                 </div>
                                 <div className="input-values">
                                   {renderValue(data?.price)
-                                    ? `$${data.price}`
+                                    ? `$${Number(data.price).toLocaleString()}`
                                     : "N/A"}
                                 </div>
                               </React.Fragment>
                             )
                         )}
                     </div>
+                  </div>
+                  <div className="field-container">
+                    <div className="field-name">
+                      Financial Professional Fee Type
+                    </div>
+                    <div className="header-labels">
+                      {calculationData["FPfeeType"] &&
+                        calculationData["FPfeeType"].map((feeType, index) =>
+                          feeType !== "" ? (
+                            <div
+                              key={index}
+                              className="header-label three-column"
+                            >
+                              {feeType}
+                            </div>
+                          ) : null
+                        )}
+                    </div>
+                  </div>
+                  <div className="field-container">
+                    <div className="field-name">Program Selected</div>
+                    <div className="header-labels">
+                      {calculationData["paymentOption"] &&
+                        calculationData["paymentOption"].map((data, index) =>
+                          data !== "" ? (
+                            <div
+                              key={index}
+                              className="header-label three-column"
+                            >
+                              {data}
+                            </div>
+                          ) : null
+                        )}
+                    </div>
+                  </div>
+
+                  <div className="field-container">
+                    <div className="field-name">
+                      Financial Professional AUA discount applied
+                    </div>
+                    {calculationData["AdditionalDetails"] &&
+                      calculationData["AdditionalDetails"].map((data, index) =>
+                        data?.auaDiscount &&
+                        calculationData["scenario-name"][index] ? (
+                          <div key={index} className="header-labels">
+                            <div className="header-label three-column">
+                              {data.auaDiscount}%
+                            </div>
+                          </div>
+                        ) : null
+                      )}
                   </div>
                 </div>
               </div>
@@ -425,7 +518,7 @@ const ExportToPDF = ({
                   <div className="value-container">
                     <div className="value">
                       {fpValues[index]?.rate
-                        ? `${fpValues[index]?.rate}%`
+                        ? `${Number(fpValues[index]?.rate).toLocaleString()}%`
                         : "N/A"}
                     </div>
                     <div className="value">
@@ -636,151 +729,189 @@ const ExportToPDF = ({
             )}
             <div className="results-divider"></div>
 
-            <div className="pdf-bottom-section-parent">
-              <div className="pdf-bottom-left">
-                <span className="bottom-section-heading">
-                  Scenario Assumptions
-                </span>
-                <div className="results-divider"></div>
-                <div className="row">
-                  <div className="label pdf-bottom-section">Account Value</div>
-                  <div className="value-container">
-                    <div className="value">
-                      {accountValue[index]?.price
-                        ? `$${Number(
-                            accountValue[index]?.price
-                          ).toLocaleString()}`
-                        : "N/A"}
+            {pdfType !== "comparison" && (
+              <div className="pdf-bottom-section-parent">
+                <div className="pdf-bottom-left">
+                  <span className="bottom-section-heading">
+                    Scenario Assumptions
+                  </span>
+                  <div className="results-divider"></div>
+                  <div className="row">
+                    <div className="label pdf-bottom-section">
+                      Account Value
+                    </div>
+                    <div className="value-container">
+                      <div className="value">
+                        {accountValue[index]?.price
+                          ? `$${Number(
+                              accountValue[index]?.price
+                            ).toLocaleString()}`
+                          : "N/A"}
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="results-divider"></div>
-                <div className="row">
-                  <div className="label pdf-bottom-section">
-                    WealthPort Household value
-                  </div>
-                  <div className="value-container">
-                    <div className="value">
-                      {houseHoldValue[index]?.rate
-                        ? `${Number(
-                            houseHoldValue[index]?.rate
-                          ).toLocaleString()}%`
-                        : "N/A"}
+                  <div className="results-divider"></div>
+                  <div className="row">
+                    <div className="label pdf-bottom-section">
+                      WealthPort Household value
+                    </div>
+                    <div className="value-container">
+                      <div className="value">
+                        {houseHoldValue[index]?.rate
+                          ? `${Number(
+                              houseHoldValue[index]?.rate
+                            ).toLocaleString()}%`
+                          : "N/A"}
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div className="results-divider"></div>
-                <div className="row">
-                  <div className="label pdf-bottom-section">
-                    Financial Professional Fee Type
-                  </div>
-                  <div className="value-container types">
-                    <div className="value">{feeType[index] || "N/A"}</div>
-                  </div>
-                </div>
-                <div className="results-divider"></div>
-                <div className="row">
-                  <div className="label pdf-bottom-section">
-                    Program Selected
-                  </div>
-                  <div className="value-container">
-                    <div className="value">
-                      {calculationData["paymentOption"] &&
-                      calculationData["paymentOption"][index]
-                        ? calculationData["paymentOption"][index]
-                        : "N/A"}
+                  <div className="results-divider"></div>
+                  <div className="row">
+                    <div className="label pdf-bottom-section">
+                      Financial Professional Fee Type
+                    </div>
+                    <div className="value-container types">
+                      <div className="value">{feeType[index] || "N/A"}</div>
                     </div>
                   </div>
-                </div>
-                <div className="results-divider"></div>
-                <div className="row">
-                  <div className="label pdf-bottom-section">
-                    Financial Professional AUA discount applied
-                  </div>
-                  <div className="value-container">
-                    <div className="value">
-                      {calculationData["AdditionalDetails"][index] &&
-                      calculationData["AdditionalDetails"][index]?.auaDiscount
-                        ? calculationData["AdditionalDetails"][index]
-                            ?.auaDiscount
-                        : "N/A"}
+                  <div className="results-divider"></div>
+                  <div className="row">
+                    <div className="label pdf-bottom-section">
+                      Program Selected
+                    </div>
+                    <div className="value-container">
+                      <div className="value">
+                        {calculationData["paymentOption"] &&
+                        calculationData["paymentOption"][index]
+                          ? calculationData["paymentOption"][index]
+                          : "N/A"}
+                      </div>
                     </div>
                   </div>
+                  <div className="results-divider"></div>
+                  <div className="row">
+                    <div className="label pdf-bottom-section">
+                      Financial Professional AUA discount applied
+                    </div>
+                    <div className="value-container">
+                      <div className="value">
+                        {calculationData["AdditionalDetails"][index] &&
+                        calculationData["AdditionalDetails"][index]?.auaDiscount
+                          ? calculationData["AdditionalDetails"][index]
+                              ?.auaDiscount
+                          : "N/A"}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="results-divider"></div>
                 </div>
-                <div className="results-divider"></div>
+                <div className="pdf-bottom-right">
+                  <span className="bottom-section-heading">
+                    Program Fee Schedule (UMA/SMA)
+                  </span>
+                  <div className="results-divider"></div>
+                  <div className="row">
+                    <div className="label pdf-bottom-section">
+                      Account Value
+                    </div>
+                    <div className="value-container">
+                      <div className="value">
+                        {accountValue[index]?.price
+                          ? `$${Number(
+                              accountValue[index]?.price
+                            ).toLocaleString()}`
+                          : "N/A"}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="results-divider"></div>
+                  <div className="row">
+                    <div className="label pdf-bottom-section">
+                      WealthPort Household value
+                    </div>
+                    <div className="value-container">
+                      <div className="value">
+                        {houseHoldValue[index]?.rate
+                          ? `${Number(
+                              houseHoldValue[index]?.rate
+                            ).toLocaleString()}%`
+                          : "N/A"}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="results-divider"></div>
+                  <div className="row">
+                    <div className="label pdf-bottom-section">
+                      Financial Professional Fee Type
+                    </div>
+                    <div className="value-container types">
+                      <div className="value">{feeType[index] || "N/A"}</div>
+                    </div>
+                  </div>
+                  <div className="results-divider"></div>
+                  <div className="row">
+                    <div className="label pdf-bottom-section">
+                      Program Selected
+                    </div>
+                    <div className="value-container">
+                      <div className="value">
+                        {calculationData["paymentOption"] &&
+                        calculationData["paymentOption"][index]
+                          ? calculationData["paymentOption"][index]
+                          : "N/A"}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="results-divider"></div>
+                  <div className="row">
+                    <div className="label pdf-bottom-section">
+                      Financial Professional AUA discount applied
+                    </div>
+                    <div className="value-container">
+                      <div className="value">
+                        {calculationData["AdditionalDetails"][index] &&
+                        calculationData["AdditionalDetails"][index]?.auaDiscount
+                          ? calculationData["AdditionalDetails"][index]
+                              ?.auaDiscount
+                          : "N/A"}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="results-divider"></div>
+                </div>
               </div>
-              <div className="pdf-bottom-right">
-                <span className="bottom-section-heading">
-                  Program Fee Schedule (UMA/SMA)
-                </span>
-                <div className="results-divider"></div>
-                <div className="row">
-                  <div className="label pdf-bottom-section">Account Value</div>
-                  <div className="value-container">
-                    <div className="value">
-                      {accountValue[index]?.price
-                        ? `$${Number(
-                            accountValue[index]?.price
-                          ).toLocaleString()}`
-                        : "N/A"}
-                    </div>
-                  </div>
-                </div>
-                <div className="results-divider"></div>
-                <div className="row">
-                  <div className="label pdf-bottom-section">
-                    WealthPort Household value
-                  </div>
-                  <div className="value-container">
-                    <div className="value">
-                      {houseHoldValue[index]?.rate
-                        ? `${Number(
-                            houseHoldValue[index]?.rate
-                          ).toLocaleString()}%`
-                        : "N/A"}
-                    </div>
-                  </div>
-                </div>
-                <div className="results-divider"></div>
-                <div className="row">
-                  <div className="label pdf-bottom-section">
-                    Financial Professional Fee Type
-                  </div>
-                  <div className="value-container types">
-                    <div className="value">{feeType[index] || "N/A"}</div>
-                  </div>
-                </div>
-                <div className="results-divider"></div>
-                <div className="row">
-                  <div className="label pdf-bottom-section">
-                    Program Selected
-                  </div>
-                  <div className="value-container">
-                    <div className="value">
-                      {calculationData["paymentOption"] &&
-                      calculationData["paymentOption"][index]
-                        ? calculationData["paymentOption"][index]
-                        : "N/A"}
-                    </div>
-                  </div>
-                </div>
-                <div className="results-divider"></div>
-                <div className="row">
-                  <div className="label pdf-bottom-section">
-                    Financial Professional AUA discount applied
-                  </div>
-                  <div className="value-container">
-                    <div className="value">
-                      {calculationData["AdditionalDetails"][index] &&
-                      calculationData["AdditionalDetails"][index]?.auaDiscount
-                        ? calculationData["AdditionalDetails"][index]
-                            ?.auaDiscount
-                        : "N/A"}
-                    </div>
-                  </div>
-                </div>
-                <div className="results-divider"></div>
-              </div>
+            )}
+            <div className="comparison-paragraph">
+              <span>
+                *The fee information displayed is a point-in-time estimate based
+                on the information provided for this illustration and may vary
+                from an actual account. Any fees represented in this tool are
+                for illustrative purposes only and actual account fees will
+                fluctuate over time depending on many factors including but not
+                limited to, account value over time and any changes to
+                investment strategy. Discounts displayed in this illustration
+                may not apply initially or over time if qualifying requirements
+                are not met or maintained. An undiscounted Program Fee Schedule
+                can be located at the end of this document. This estimate does
+                not constitute an agreement and does not supersede any client
+                agreements or new account documentation. Client agreements and
+                new account documentation should be reviewed with your financial
+                professional to understand applicable fees and how they are
+                assessed on an account. Strategist Fees are subject to change.
+                Fees are shown annualized, however, will be charged at intervals
+                throughout the year. **Fund expenses are operating costs
+                incurred and charged by the investment companies that provide
+                certain types of investment products. These expenses are not
+                debited directly from an investment account, but do impact the
+                performance of the investment product and therefore are
+                important to consider when investing. Fund expenses displayed
+                are an estimate and may change over time. Consult your financial
+                professional to understand the impact these expenses may have on
+                your account. CAAP® is a registered mark of Cambridge Investment
+                Research, Inc. for its program for investment managers. CAAP and
+                UMA have an annual minimum Program Fee of $250.00. There is no
+                annual minimum Program Fee for CAAP Small Account Solutions.
+              </span>
             </div>
           </div>
         </div>

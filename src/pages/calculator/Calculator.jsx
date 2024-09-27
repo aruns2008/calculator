@@ -86,10 +86,11 @@ function CalculatorPage() {
         <div className="calculation-left">
           {/* Main Content Section */}
           <h1> WealthPort Fee Calculator</h1>
-          <div className="container">
+          <div className="calculator-container">
             <div className="contentWrapper">
               <div className="imageColumn">
-                <img loading="lazy" src="/icon.svg" className="featureImage" />
+              {/* <img loading="lazy" src={`${process.env.PUBLIC_URL}/icon.svg`} className="featureImage" alt="Feature" /> */}
+              <img loading="lazy" src="https://aruns2008.github.io/calculator/icon.svg" className="featureImage" alt="Feature" />
               </div>
               <div className="textColumn">
                 <div className="description">

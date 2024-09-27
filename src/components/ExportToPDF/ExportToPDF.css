@@ -6,7 +6,7 @@
   margin-top: 100px;
   .header,
   .fee-details {
-    width: 50%;
+    width: 80%;
   }
   .section-title {
     font-size: 12px;
@@ -27,7 +27,7 @@
     text-align: left;
     display: flex;
     flex-direction: column;
-    color:rgba(28, 43, 54, 1) ;
+    color: rgba(28, 43, 54, 1);
   }
   .label span {
     font-size: 9px;
@@ -195,7 +195,8 @@
     justify-content: center;
   }
 
-  .input-values {
+  .input-values,
+  .header-label.three-column {
     flex: 1;
     text-align: center;
     overflow-wrap: break-word;
@@ -225,4 +226,12 @@
   .main-container.active {
     display: none;
   }
+}
+.comparison-paragraph {
+  font-size: 9px;
+  font-weight: 400;
+  line-height: 12.29px;
+  text-align: left;
+  color: rgba(28, 43, 54, 1);
+  padding-top: 10px;
 }

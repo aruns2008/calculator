@@ -3,7 +3,7 @@ import { useCalculationStorage } from "../../context/StorageContext";
 import comparison from "./comparison.css";
 import Button from "../../components/button/Button";
 
-const Comparison = ({handlePdfGeneration,handleShare}) => {
+const Comparison = ({ handlePdfGeneration, handleShare }) => {
   const {
     fpValues,
     accountValue,
@@ -27,22 +27,34 @@ const Comparison = ({handlePdfGeneration,handleShare}) => {
     handleDelete,
     calculationData,
   } = useCalculationStorage();
+
   const renderValue = (value) => {
     if (value)
       return (
         value !== undefined && value !== null && value !== "" && value !== "N/A"
       );
   };
+
+  const formatNumber = (number) => {
+    if (typeof number === "number" || !isNaN(Number(number))) {
+      return Number(number).toLocaleString("en-US");
+    }
+    return number;
+  };
+
   return (
-    <div className={`main-container ${calculationData["scenario-name"] && calculationData["scenario-name"].every(element => element === '') ? "active" : ""}`}>
+    <div
+      className={`main-container ${
+        calculationData["scenario-name"] &&
+        calculationData["scenario-name"].every((element) => element === "")
+          ? "active"
+          : ""
+      }`}
+    >
       <div>
         <div className="header">
           <div className="title-block">
-            <h1>
-              {/* {getCalculationDataValue("scenario-name") ||
-                "Investment Account Fee Estimate 1"} */}
-              Investment Account Fee Estimate
-            </h1>
+            <h1>Investment Account Fee Estimate</h1>
             <p>
               As of Date:{" "}
               {getCalculationDataValue("currentDate")[index]
@@ -51,16 +63,6 @@ const Comparison = ({handlePdfGeneration,handleShare}) => {
             </p>
           </div>
           <div className="actions">
-            <Button
-              onClick={() => handleEdit(index)}
-              text={"Edit"}
-              configuresStyles={"result-button action-button"}
-            ></Button>
-            <Button
-              onClick={() => handleDelete(index)}
-              text={"Delete"}
-              configuresStyles={"result-button action-button"}
-            ></Button>
             <Button
               text={"Share"}
               onClick={() => handleShare(0, "group-scenario")}
@@ -110,7 +112,7 @@ const Comparison = ({handlePdfGeneration,handleShare}) => {
                 calculationData["account-value"].map((value, idx) =>
                   renderValue(value) ? (
                     <div key={idx} className="header-label three-column">
-                      {`$${value}`}
+                      {`$${formatNumber(value)}`}
                     </div>
                   ) : null
                 )}
@@ -132,10 +134,14 @@ const Comparison = ({handlePdfGeneration,handleShare}) => {
                     value.price !== "" && (
                       <React.Fragment key={idx}>
                         <div className="input-values">
-                          {renderValue(value.rate) ? `$${value.rate}` : "N/A"}
+                          {renderValue(value.rate)
+                            ? `${formatNumber(value.rate)}%`
+                            : "N/A"}
                         </div>
                         <div className="input-values">
-                          {renderValue(value.price) ? `${value.price}%` : "N/A"}
+                          {renderValue(value.price)
+                            ? `$${formatNumber(value.price)}`
+                            : "N/A"}
                         </div>
                       </React.Fragment>
                     )
@@ -161,12 +167,12 @@ const Comparison = ({handlePdfGeneration,handleShare}) => {
                       <React.Fragment key={index}>
                         <div className="input-values">
                           {value && renderValue(value.rate)
-                            ? `${value.rate}%`
+                            ? `${formatNumber(value.rate)}%`
                             : "N/A"}
                         </div>
                         <div className="input-values">
                           {value && renderValue(value.price)
-                            ? `$${value.price}`
+                            ? `$${formatNumber(value.price)}`
                             : "N/A"}
                         </div>
                       </React.Fragment>
@@ -182,17 +188,32 @@ const Comparison = ({handlePdfGeneration,handleShare}) => {
               </span>
             </div>
             <div className="header-labels">
-              {strategistFeeValues &&
-                strategistFeeValues.map((value, index) => (
-                  <React.Fragment key={index}>
-                    <div className="input-values">
-                      {value && value.rate && value.rate !== "N/A" ? `${value.rate}%` : "N/A"}
-                    </div>
-                    <div className="input-values">
-                      {value && value.price && value.price !== "N/A" ? `$${value.price}` : "N/A"}
-                    </div>
-                  </React.Fragment>
-                ))}
+              {calculationData["account-value"] &&
+                calculationData["account-value"].map((accValue, idx) => {
+                  if (accValue === "") return null;
+                  const feeValue = strategistFeeValues[idx] || {
+                    rate: "N/A",
+                    price: "N/A",
+                  };
+
+                  return (
+                    <React.Fragment key={idx}>
+                      <div className="input-values">
+                        {feeValue.rate &&
+                        feeValue.rate !== "N/A" &&
+                        feeValue.rate !== undefined &&
+                        feeValue.rate !== ""
+                          ? `${formatNumber(feeValue.rate)}%`
+                          : "N/A"}
+                      </div>
+                      <div className="input-values">
+                        {feeValue.price && feeValue.price !== "N/A"
+                          ? `$${formatNumber(feeValue.price)}`
+                          : "N/A"}
+                      </div>                      
+                    </React.Fragment>
+                  );
+                })}
             </div>
           </div>
 
@@ -203,18 +224,30 @@ const Comparison = ({handlePdfGeneration,handleShare}) => {
                 A fee that may be charged by the Strategist for asset allocation
               </span>
             </div>
-            <div className="header-labels">            
-              {totalAccountFeeValues &&
-                totalAccountFeeValues.map((value, index) => (
-                  <React.Fragment key={index}>
-                    <div className="input-values">
-                      {value && value.rate && value.rate !== "N/A" ? `${value.rate}%` : "N/A"}
-                    </div>
-                    <div className="input-values">
-                      {value && value.price && value.price !== "N/A" ? `$${value.price}` : "N/A"}
-                    </div>
-                  </React.Fragment>
-                ))}
+            <div className="header-labels">
+              {calculationData["account-value"] &&
+                calculationData["account-value"].map((accValue, idx) => {
+                  if (accValue === "") return null;
+                  const feeValue = totalAccountFeeValues[idx] || {
+                    rate: "N/A",
+                    price: "N/A",
+                  };
+
+                  return (
+                    <React.Fragment key={idx}>
+                      <div className="input-values">
+                        {feeValue.rate && feeValue.rate !== "N/A"
+                          ? `${formatNumber(feeValue.rate)}%`
+                          : "N/A"}
+                      </div>
+                      <div className="input-values">
+                        {feeValue.price && feeValue.price !== "N/A"
+                          ? `$${formatNumber(feeValue.price)}`
+                          : "N/A"}
+                      </div>
+                    </React.Fragment>
+                  );
+                })}
             </div>
           </div>
           <div className="field-container">
@@ -233,10 +266,14 @@ const Comparison = ({handlePdfGeneration,handleShare}) => {
                     data?.price !== "" && (
                       <React.Fragment key={index}>
                         <div className="input-values">
-                          {renderValue(data?.rate) ? `${data.rate}%` : "N/A"}
+                          {renderValue(data?.rate)
+                            ? `${formatNumber(data.rate)}%`
+                            : "N/A"}
                         </div>
                         <div className="input-values">
-                          {renderValue(data?.price) ? `$${data.price}` : "N/A"}
+                          {renderValue(data?.price)
+                            ? `$${formatNumber(data.price)}`
+                            : "N/A"}
                         </div>
                       </React.Fragment>
                     )
@@ -256,10 +293,14 @@ const Comparison = ({handlePdfGeneration,handleShare}) => {
                     data?.price !== "" && (
                       <React.Fragment key={index}>
                         <div className="input-values">
-                          {renderValue(data?.rate) ? `${data.rate}%` : "N/A"}
+                          {renderValue(data?.rate)
+                            ? `${formatNumber(data.rate)}%`
+                            : "N/A"}
                         </div>
                         <div className="input-values">
-                          {renderValue(data?.price) ? `$${data.price}` : "N/A"}
+                          {renderValue(data?.price)
+                            ? `$${formatNumber(data.price)}`
+                            : "N/A"}
                         </div>
                       </React.Fragment>
                     )
@@ -279,10 +320,14 @@ const Comparison = ({handlePdfGeneration,handleShare}) => {
                     data?.price !== "" && (
                       <React.Fragment key={index}>
                         <div className="input-values">
-                          {renderValue(data?.rate) ? `${data.rate}%` : "N/A"}
+                          {renderValue(data?.rate)
+                            ? `${formatNumber(data.rate)}%`
+                            : "N/A"}
                         </div>
                         <div className="input-values">
-                          {renderValue(data?.price) ? `$${data.price}` : "N/A"}
+                          {renderValue(data?.price)
+                            ? `$${formatNumber(data.price)}`
+                            : "N/A"}
                         </div>
                       </React.Fragment>
                     )
@@ -290,34 +335,7 @@ const Comparison = ({handlePdfGeneration,handleShare}) => {
             </div>
           </div>
           <div className="field-container">
-            <div className="field-name">
-              Fund Expenses
-              <span></span>
-            </div>
-            <div className="header-labels">
-              {fundExpenses &&
-                fundExpenses.map(
-                  (data, index) =>
-                    data?.rate !== "" &&
-                    data?.price !== "" && (
-                      <React.Fragment key={index}>
-                        <div className="input-values">
-                          {renderValue(data?.rate) ? `${data.rate}%` : "N/A"}
-                        </div>
-                        <div className="input-values">
-                          {renderValue(data?.price) ? `$${data.price}` : "N/A"}
-                        </div>
-                      </React.Fragment>
-                    )
-                )}
-            </div>
-          </div>
-
-          <div className="field-container">
-            <div className="field-name">
-              Household Value
-              <span></span>
-            </div>
+            <div className="field-name">Household Value</div>
             <div className="header-labels">
               {houseHoldValue &&
                 houseHoldValue.map(
@@ -326,10 +344,14 @@ const Comparison = ({handlePdfGeneration,handleShare}) => {
                     data?.price !== "" && (
                       <React.Fragment key={index}>
                         <div className="input-values">
-                          {renderValue(data?.rate) ? `${data.rate}%` : "N/A"}
+                          {renderValue(data?.rate)
+                            ? `${formatNumber(data.rate)}%`
+                            : "N/A"}
                         </div>
                         <div className="input-values">
-                          {renderValue(data?.price) ? `$${data.price}` : "N/A"}
+                          {renderValue(data?.price)
+                            ? `$${formatNumber(data.price)}`
+                            : "N/A"}
                         </div>
                       </React.Fragment>
                     )

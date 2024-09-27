@@ -67,7 +67,7 @@ const StrategistFee = ({
   const [selectedEquitySMA, setSelectedEquitySMA] = useState(initialEquitySMA);
   const [selectedMFETF, setSelectedMFETF] = useState(initialMFETF);
   const [editingStrategist, setEditingStrategist] = useState(null);
-  const handleFocus = (selected) => {
+  const handleFocus = (selected) => {       
     setEditingStrategist(selected.label);
   };
 
@@ -243,18 +243,18 @@ const StrategistFee = ({
     });
   };
 
-  const handleStrategistInput = (e, type, data_value) => {
+  const handleStrategistInput = (e, type, data_value,label,selected) => {
     const { name, dataset, key } = e.target;
     const formated_input = e.target.value.replace(/[^\d.]/g, "");
     const userInputValue = formated_input;
     const value = data_value;
-    const strategistName = dataset.label;
+    const strategistName = label;
     const accountValue =
       parseFloat(calculationData["account-value"][index]) || 0;
     const UMA_SMA_Strategist_Fee =
       getCalculationDataValue("UMA-SMA-Strategist-Fee")[index] || {};
     const dollarValue =
-      accountValue !== 0 || accountValue !== null
+      accountValue !== 0 || accountValue !== null && value !== undefined
         ? (accountValue * value) / 100
         : 0;
     const roundedValue = Math.ceil(dollarValue);
@@ -297,9 +297,7 @@ const StrategistFee = ({
       };
     });
   };
-  const handleInputChange = (e, type, data_value) => {
-    handleStrategistInput(e, type, data_value);
-  };
+
   // Function to render selected strategists with input fields for fee and value
   const renderSelectedStrategists = (selectedList) =>
     selectedList.map((selected) => (
@@ -313,8 +311,9 @@ const StrategistFee = ({
           <Radio
             selectedValue={selected.label}
             value={editingStrategist}
-            onchange={setEditingStrategist}
-            name="paymentOption"
+            // onchange={setEditingStrategist}
+            name="paymentOption"    
+            placeholder={"hello"}        
           />          
           {/* <span type="radio"
             checked={editingStrategist === selected.value}
@@ -324,7 +323,7 @@ const StrategistFee = ({
         </div>
         <div className="strategist-input-container">
           <div className="strategist-fee">
-            <input
+            {/* <input
               onFocus={() => handleFocus(selected)}
               onChange={(e) => {
                 handleStrategistInput(e, selected.type, selected.data_value);
@@ -336,21 +335,21 @@ const StrategistFee = ({
               placeholder="%"
               className="fee-input"
                value={selected.inputValue}
-              // value={`${formatNumberWithCommas()} `}
-            />
-            {/* <NumberInput
+              // value={`%${formatNumberWithCommas(selected.inputValue)}`}
+            /> */}
+            <NumberInput
+              onFocus={() => handleFocus(selected)}
+              onChange={(e) => {
+                handleStrategistInput(e, selected.type, selected.value,selected.label,selected);
+              }}
               data-label={selected.label}
               data-name={selected.type}
               name={selected.value}
-              value={selected.value}
-              onChange={(e) =>
-                handleInputChange(e, selected.type, selected.data_value)
-              }
               placeholder="%"
               className="fee-input"
               symbol="%"
-              onFocus={() => handleFocus(selected)}
-            /> */}
+              value={selected.inputValue || 0}
+            />
           </div>
           <div className="fee-dollar-value">{`$${
             selected.dollarValue || 0
