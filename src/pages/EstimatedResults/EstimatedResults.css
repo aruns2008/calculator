@@ -74,7 +74,7 @@ span {
   color: #1c2b36;
 }
 
-.estimated-results .row {
+.estimated-results .estimated-results-item {
   display: flex;
   justify-content: space-between;
   padding: 6px 0;
@@ -545,4 +545,10 @@ span {
   .bottom-section {
     display: flex;
   }
+}
+.results-item{
+  display: flex !important;
+  justify-content: space-between !important;
+  margin: 0;
+  padding: 6px 0;
 }
