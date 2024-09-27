@@ -8,7 +8,7 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { retrieveData } from "../../utils/dynamoDB";
 import formatDate from "../../utils/dateFormatter";
 
-const ScenarioViewer = () => {
+const ScenarioViewer = () => {  
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -451,7 +451,7 @@ const ScenarioViewer = () => {
                 </div>
               </div>
               <div className="results-divider sub"></div>
-              <div className="row">
+              <div className="results-item">
                 <div className="label">Financial Professional Fee</div>
                 <div className="value-container">
                   <div className="value">
@@ -467,7 +467,7 @@ const ScenarioViewer = () => {
                 </div>
               </div>
               <div className="results-divider"></div>
-              <div className="row">
+              <div className="results-item">
                 <div className="label">Program Fee</div>
                 <div className="value-container">
                   <div className="value">
@@ -483,7 +483,7 @@ const ScenarioViewer = () => {
                 </div>
               </div>
               <div className="results-divider"></div>
-              <div className="row">
+              <div className="results-item">
                 <div className="label">Strategist Fee (if applicable)</div>
                 <div className="value-container">
                   <div className="value">
@@ -499,7 +499,7 @@ const ScenarioViewer = () => {
                 </div>
               </div>
               <div className="results-divider"></div>
-              <div className="row">
+              <div className="results-item">
                 <div className="label">Total Account Fee (annualized)</div>
                 <div className="value-container">
                   <div className="value">
@@ -515,7 +515,7 @@ const ScenarioViewer = () => {
                 </div>
               </div>
               <div className="results-divider"></div>
-              <div className="row">
+              <div className="results-item">
                 <div className="label">
                   Total Client Fees (including Fund Expenses)
                 </div>
@@ -533,7 +533,7 @@ const ScenarioViewer = () => {
                 </div>
               </div>
               <div className="results-divider"></div>
-              <div className="row">
+              <div className="results-item">
                 <div className="label">
                   Gross Annual Fee to Financial Professional
                 </div>
@@ -551,7 +551,7 @@ const ScenarioViewer = () => {
                 </div>
               </div>
               <div className="results-divider"></div>
-              <div className="row">
+              <div className="results-item">
                 <div className="label">
                   Net Annual Fee to Financial Professional
                 </div>
@@ -569,7 +569,7 @@ const ScenarioViewer = () => {
                 </div>
               </div>
               <div className="results-divider"></div>
-              <div className="row">
+              <div className="results-item">
                 <div className="label">Account Value</div>
                 <div className="value-container">
                   <div className="value">
@@ -585,7 +585,7 @@ const ScenarioViewer = () => {
                 </div>
               </div>
               <div className="results-divider"></div>
-              <div className="row">
+              <div className="results-item">
                 <div className="label">Fund Expenses</div>
                 <div className="value-container">
                   <div className="value">
@@ -597,7 +597,7 @@ const ScenarioViewer = () => {
                 </div>
               </div>
               <div className="results-divider"></div>
-              <div className="row">
+              <div className="results-item">
                 <div className="label">Financial Professional Payout</div>
                 <div className="value-container">
                   <div className="value">
@@ -609,7 +609,7 @@ const ScenarioViewer = () => {
                 </div>
               </div>
               <div className="results-divider"></div>
-              <div className="row">
+              <div className="results-item">
                 <div className="label">Household Value</div>
                 <div className="value-container">
                   <div className="value">
@@ -621,7 +621,7 @@ const ScenarioViewer = () => {
                 </div>
               </div>
               <div className="results-divider"></div>
-              <div className="row">
+              <div className="results-item">
                 <div className="label">Fee Type</div>
                 <div className="value-container types">
                   <div className="value">{renderValue(feeType) || "N/A"}</div>
