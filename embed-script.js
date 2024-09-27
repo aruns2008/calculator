@@ -31,7 +31,7 @@ var link = document.createElement('link');
 link.rel = 'stylesheet';
 link.href = 'https://aruns2008.github.io/calculator/style.css';
 
-// Load the JavaScript file
+// Load the JavaScript file 
 var script = document.createElement('script');
 script.src = 'https://aruns2008.github.io/calculator/script.js';
 script.async = true;
