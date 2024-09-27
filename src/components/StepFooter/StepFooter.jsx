@@ -73,9 +73,6 @@ const StepFooter = ({ currentStep = 1, from }) => {
     }
   }, []);
 
-  useEffect(() => {
-    console.log(allowCreation, "allowCreation");
-  }, [allowCreation]);
 
   const stepLabels = {
     1: "Financial Professional Fee",

@@ -1,5 +1,5 @@
 import React from 'react';
-import { HashRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import CalculatorPage from "./pages/calculator/Calculator";
 import { CalculationStorageProvider } from "./context/StorageContext";
 import EstimatedResults from "./pages/EstimatedResults/EstimatedResults";
@@ -7,7 +7,7 @@ import ScenarioViewer from "./pages/ScenarioViewer/ScenarioViewer";
 
 function App() {
   return (
-    <Router basename="/">
+    <Router>
       <CalculationStorageProvider>
         <Routes>
           <Route path="/" element={<CalculatorPage />} />

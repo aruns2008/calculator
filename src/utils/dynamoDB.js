@@ -1,26 +1,24 @@
-// utils/dynamoDB.js
-
 import AWS from 'aws-sdk';
 
-// Explicitly set AWS credentials for local development
+// Set AWS credentials and region (Note: Secure credentials in production)
 AWS.config.update({
-  accessKeyId: 'dummyAccessKeyId',
-  secretAccessKey: 'dummySecretAccessKey',
-  region: 'us-west-2', // Your AWS region
-  endpoint: 'http://localhost:8000', // Endpoint for local DynamoDB
+  accessKeyId: 'AKIARZF7DL3WVMZIQG4N',
+  secretAccessKey: 'Hc1R+sQxI9t+TY0gkcdvIAYfpJxS5lp2mZHBpHAo',
+  region: 'ap-south-1',
 });
 
 const docClient = new AWS.DynamoDB.DocumentClient();
-const TABLE_NAME = 'Calculations';
+const dynamoDB = new AWS.DynamoDB();  // This is used for table-related operations
+const TABLE_NAME = 'WP_Calculator-Data';
 
 // Function to store data in DynamoDB
 export const storeData = async (data) => {    
   const params = {
     TableName: TABLE_NAME,
     Item: {
-      id: data.id,
+      Id: data.id,
       name: data.name,
-      scenarios:data.scenarios,
+      scenarios: data.scenarios,
       fpValues: data.fpValues,
       accountValue: data.accountValue,
       fundExpenses: data.fundExpenses,
@@ -34,32 +32,34 @@ export const storeData = async (data) => {
       totalClientFeeValues: data.totalClientFeeValues,
       grossAnnualFeeValues: data.grossAnnualFeeValues,
       netAnnualFeeValues: data.netAnnualFeeValues,
-      AUAdiscount:data.AUAdiscount,
+      AUAdiscount: data.AUAdiscount,
     },
   };
 
   try {
     await docClient.put(params).promise();
-    console.log('Data stored successfully');
+    console.log('Data stored successfully in DynamoDB');
   } catch (error) {
-    console.error('Error storing data:', error);
+    console.error('Error storing data in DynamoDB:', error);
   }
 };
 
-// Function to retrieve data from DynamoDB
+// Function to retrieve data from DynamoDB using ID
 export const retrieveData = async (id) => {
+  console.log('called');
   const params = {
     TableName: TABLE_NAME,
     Key: {
-      id: id,
+      Id: id,
     },
   };
 
   try {
     const data = await docClient.get(params).promise();
-    console.log('Data retrieved successfully:', data.Item);
+    console.log('Data retrieved successfully from DynamoDB:', data.Item);
+    console.log(id);
     return data.Item;
   } catch (error) {
-    console.error('Error retrieving data:', error);
+    console.error('Error retrieving data from DynamoDB:', error);
   }
 };

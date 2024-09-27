@@ -11,7 +11,7 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { storeData, retrieveData } from "../../utils/dynamoDB";
 import formatDate from "../../utils/dateFormatter";
 import { useParams } from "react-router-dom";
-const EstimatedResults = () => {
+const EstimatedResults = () => {  
   const navigate = useNavigate();
   const { scenarioId } = useParams();
   const {
@@ -134,22 +134,35 @@ const EstimatedResults = () => {
   };
   const formatId = (name) => name.replace(/\s+/g, "");
 
+  // const handleShare = async (index, type) => {
+  //   setShareIndex(index);
+  //   setShareType(type);
+  //   const currentDate = new Date();
+  //   setShareDate(formatDate(currentDate));
+  //   const scenarioName =
+  //     getCalculationDataValue("scenario-name")[index] || "test";
+  //   setLink(
+  //     `http://localhost:3001/scenario-viewer?scenarioId=${formatId(
+  //       scenarioName
+  //     )}`
+  //   );
+  //   setShareModal(true);
+  // };
+
   const handleShare = async (index, type) => {
     setShareIndex(index);
     setShareType(type);
     const currentDate = new Date();
-    setShareDate(formatDate(currentDate));
-    const scenarioName =
-      getCalculationDataValue("scenario-name")[index] || "test";
-    setLink(
-      `http://localhost:3000/scenario-viewer?scenarioId=${formatId(
-        scenarioName
-      )}`
-    );
+    setShareDate(formatDate(currentDate));  
+    const scenarioName = getCalculationDataValue("scenario-name")[index] || "test";
+    const baseURL = window.location.origin;
+    const shareLink = `${baseURL}/scenario-viewer?scenarioId=${formatId(scenarioName)}`;
+    setLink(shareLink);
     setShareModal(true);
   };
+  
 
-  const handleAgreeAndContinue = async () => {
+  const handleAgreeAndContinue = async () => {    
     let scenarioName = "";
     let data = {};
     if (shareType === "group-scenario") {
@@ -304,7 +317,7 @@ const EstimatedResults = () => {
                   </div>
 
                   <div className="results-divider sub"></div>
-                  <div className="row">
+                  <div className="estimated-results-item">
                     <div className="label">Financial Professional Fee</div>
                     <div className="value-container">
                       <div className="value">
@@ -322,7 +335,7 @@ const EstimatedResults = () => {
                     </div>
                   </div>
                   <div className="results-divider"></div>
-                  <div className="row">
+                  <div className="estimated-results-item">
                     <div className="label">Program Fee</div>
 
                     <div className="value-container">
@@ -343,7 +356,7 @@ const EstimatedResults = () => {
                     </div>
                   </div>
                   <div className="results-divider"></div>
-                  <div className="row">
+                  <div className="estimated-results-item">
                     <div className="label">Strategist Fee (if applicable)</div>
 
                     <div className="value-container">
@@ -367,7 +380,7 @@ const EstimatedResults = () => {
                   </div>
 
                   <div className="results-divider"></div>
-                  <div className="row">
+                  <div className="estimated-results-item">
                     <div className="label">Total Account Fee (annualized)</div>
 
                     <div className="value-container">
@@ -390,7 +403,7 @@ const EstimatedResults = () => {
                     </div>
                   </div>
                   <div className="results-divider"></div>
-                  <div className="row">
+                  <div className="estimated-results-item">
                     <div className="label">
                       Total Client Fees (including Fund Expenses)
                     </div>
@@ -418,7 +431,7 @@ const EstimatedResults = () => {
                     </div>
                   </div>
                   <div className="results-divider"></div>
-                  <div className="row">
+                  <div className="estimated-results-item">
                     <div className="label">
                       Gross Annual Fee to Financial Professional
                     </div>
@@ -444,7 +457,7 @@ const EstimatedResults = () => {
                     </div>
                   </div>
                   <div className="results-divider"></div>
-                  <div className="row">
+                  <div className="estimated-results-item">
                     <div className="label">
                       Net Annual Fee to Financial Professional
                     </div>
@@ -468,7 +481,7 @@ const EstimatedResults = () => {
                     </div>
                   </div>
                   <div className="results-divider"></div>
-                  <div className="row">
+                  <div className="estimated-results-item">
                     <div className="label">Account Value</div>
                     <div className="value-container">
                       <div className="value">
@@ -488,7 +501,7 @@ const EstimatedResults = () => {
                     </div>
                   </div>
                   <div className="results-divider"></div>
-                  <div className="row">
+                  <div className="estimated-results-item">
                     <div className="label">Fund Expenses</div>
                     <div className="value-container">
                       <div className="value">
@@ -502,7 +515,7 @@ const EstimatedResults = () => {
                     </div>
                   </div>
                   <div className="results-divider"></div>
-                  <div className="row">
+                  <div className="estimated-results-item">
                     <div className="label">Financial Professional Payout</div>
                     <div className="value-container">
                       <div className="value">
@@ -514,7 +527,7 @@ const EstimatedResults = () => {
                     </div>
                   </div>
                   <div className="results-divider"></div>
-                  <div className="row">
+                  <div className="estimated-results-item">
                     <div className="label">Household Value</div>
                     <div className="value-container">
                       <div className="value">
@@ -528,7 +541,7 @@ const EstimatedResults = () => {
                     </div>
                   </div>
                   <div className="results-divider"></div>
-                  <div className="row">
+                  <div className="estimated-results-item">
                     <div className="label">Fee Type</div>
                     <div className="value-container types">
                       <div className="value">{feeType[index] || "N/A"}</div>
