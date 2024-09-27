@@ -7,7 +7,6 @@ AWS.config.update({
   region: 'ap-south-1',
 });
 
-
 const docClient = new AWS.DynamoDB.DocumentClient();
 const dynamoDB = new AWS.DynamoDB();  // This is used for table-related operations
 const TABLE_NAME = 'WP_Calculator-Data';
