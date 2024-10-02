@@ -394,14 +394,7 @@ const YourEstimatedResults = ({
                 </div>
               </div>
             </div>
-            {/* <div className="divider" />
-            <div className="result-row">
-              <div className="result-label">
-                Net - Program fee paid by client was selected
-              </div>
-              <div className="result-value">N/A</div>
-              <div className="result-value">N/A</div>
-            </div> */}
+     
             <div className="divider" />
             <div className="result-row">
               <div className="result-label">Program Fee</div>
@@ -497,6 +490,7 @@ const YourEstimatedResults = ({
 
                 <div className="result-value">
                   {grossAnnualFeeValues[index]?.price !== "" &&
+                  !isNaN(grossAnnualFeeValues[index]?.price) &&
                   grossAnnualFeeValues[index]?.price !== "N/A" && grossAnnualFeeValues[index]?.price !== undefined
                     ? `$${Number(grossAnnualFeeValues[index]?.price).toLocaleString()}`
                     : "N/A"}

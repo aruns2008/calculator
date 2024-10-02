@@ -39,15 +39,4 @@ const calculateTierFee = (
   
 };
 export default calculateTierFee;
-// // Input values
-// let accountValue = 10000; // Example account value
-// let householdAUM = 0; // Example household AUM
-// let breakpoints = [5000, 5000]; // Dollar values
-// let feePercentages = [1.00, 1.00]; // Fee percentages
 
-// // Calculate tier values and fees
-// let { tierValues, tierFees, totalTierFee } = calculateTier(accountValue, householdAUM, breakpoints, feePercentages);
-
-// console.log("Tier Values:", tierValues);
-// console.log("Tier Fees:", tierFees);
-// console.log("Total Tier Fee:", totalTierFee);

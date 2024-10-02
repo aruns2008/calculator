@@ -27,7 +27,6 @@ const Comparison = ({ handlePdfGeneration, handleShare }) => {
     handleDelete,
     calculationData,
   } = useCalculationStorage();
-
   const renderValue = (value) => {
     if (value)
       return (
@@ -325,7 +324,7 @@ const Comparison = ({ handlePdfGeneration, handleShare }) => {
                             : "N/A"}
                         </div>
                         <div className="input-values">
-                          {renderValue(data?.price)
+                          {renderValue(data?.price)  && !isNaN(data.price)
                             ? `$${formatNumber(data.price)}`
                             : "N/A"}
                         </div>

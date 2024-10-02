@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import CircularProgress from "../CircularProgress/CircularProgress";
-// import './FinancialProfessionalFee.css';
 import { useCalculationStorage } from "../../context/StorageContext";
 import { type } from "@testing-library/user-event/dist/type";
 import Radio from "../Radio/Radio";
@@ -26,15 +25,6 @@ const FinancialProfessionalFee = ({
     formatCurrency,
   } = useCalculationStorage();
 
-  // const [tierValueSum, setTierValueSum] = useState({
-  //   doller: "",
-  //   percentage: "",
-  // });
-  // const [breakPointValueSum, setBreakPointValueSum] = useState({
-  //   doller: "",
-  //   percentage: "",
-  // });
-
   // Function to update tierValueSum and breakPointValueSum based on index
   const [flatValue, setFlatValue] = useState(
     getCalculationDataValue("FPfeeFlat")[index]?.amount || ""
@@ -49,22 +39,6 @@ const FinancialProfessionalFee = ({
     const formattedValue = formatNumberWithCommas(numericValue);
     setValue(formattedValue ? `${formattedValue}` : "");
   };
-
-  // useEffect(() => {
-  //   const fixedValue =
-  //     getCalculationDataValue("FPfeeFixed")[index]?.amount || "";
-  //   if (fixedValue !== undefined) {
-  //     formatAndSetValue(fixedValue, setFixedValue, "$");
-  //   }
-
-  //   const flatValue = getCalculationDataValue("FPfeeFlat")[index]?.amount || "";
-  //   if (flatValue !== undefined) {
-  //     formatAndSetValue(flatValue, setFlatValue, "%");
-  //   }
-  // }, [
-  //   getCalculationDataValue("FPfeeFixed")[index],
-  //   getCalculationDataValue("FPfeeFlat")[index],
-  // ]);
 
   const setArrayValueAtIndex = (setStateFunction, index, value) => {
     setStateFunction((prevState) => {
@@ -126,11 +100,7 @@ const FinancialProfessionalFee = ({
       sumOfPercentages: sumOfBreakPointPercentages,
     } = calculateSums(FPfeeBreakPoints);
 
-    // setTierValueSum({ doller: sumOfTiers, percentage: sumOfTierPercentages });
-    // setBreakPointValueSum({
-    //   doller: sumOfBreakPoints,
-    //   percentage: sumOfBreakPointPercentages,
-    // });
+
     updateTierAndBreakPointSums(
       index,
       sumOfTiers,
@@ -281,24 +251,6 @@ const FinancialProfessionalFee = ({
     }
   };
 
-  // // Calculate the tier progress
-  // const calculateTierProgress = () => {
-  //   const progress = tiers.reduce((total, tier) => {
-  //     const tierAmount = parseFloat(tier.amount) || 0;
-  //     return total + (tierAmount <= accountValue ? 1 : 0);
-  //   }, 0);
-  //   return (progress / tiers.length) * 100;
-  // };
-
-  // // Calculate the breakpoint progress
-  // const calculateBreakpointProgress = () => {
-  //   const progress = breakpoints.reduce((total, bp) => {
-  //     const bpAmount = parseFloat(bp.amount) || 0;
-  //     return total + (bpAmount <= accountValue ? 1 : 0);
-  //   }, 0);
-  //   return (progress / breakpoints.length) * 100;
-  // };
-
   // Dynamically label tiers and breakpoints
   const getOrdinalLabel = (index) => {
     const ordinals = [
@@ -375,14 +327,7 @@ const FinancialProfessionalFee = ({
               is 2.15%.{" "}
             </div>
             <div className="fee-input-label">Enter Flat Fee Amount (%)</div>
-            {/* <input
-              type="text"
-              onChange={handleFlat}
-              value={`${flatValue || ""}%`}
-              placeholder="%"
-              className="scenario-input"
-              min="0"
-            /> */}
+
             <NumberInput
               value={flatValue}
               onChange={handleFlat}
@@ -483,7 +428,7 @@ const FinancialProfessionalFee = ({
                 <div className="percentage-input">
                   <div>% Fee</div>
                   <NumberInput
-                    from={"tier"}                    
+                    from={"tier"}
                     value={`${formatNumber(tier.percentage)}`}
                     onChange={(e) =>
                       handleAmountChange(index, e, "percentage", "tier")
@@ -563,9 +508,9 @@ const FinancialProfessionalFee = ({
                 <div className="tier-breakpoint-input">
                   <div className="tier-label">
                     {getOrdinalLabel(index)} Breakpoint
-                  </div>                  
+                  </div>
                   <NumberInput
-                    from={"breakPoint"}                    
+                    from={"breakPoint"}
                     value={`${formatNumber(bp.amount)}`}
                     onChange={(e) =>
                       handleAmountChange(index, e, "amount", "bp")
@@ -576,18 +521,9 @@ const FinancialProfessionalFee = ({
                 </div>
                 <div className="percentage-input">
                   <div>% Fee</div>
-                  {/* <input
-                    type="text"
-                    value={formatCurrency(bp.percentage, "%")}
-                    placeholder="%"
-                    className="scenario-input"
-                    onChange={(e) =>
-                      updateBreakpoint(index, "percentage", e.target.value)
-                    }
-                    min="0"
-                  /> */}
+
                   <NumberInput
-                    from={"breakPoint"}                    
+                    from={"breakPoint"}
                     value={`${formatNumber(bp.percentage)}`}
                     onChange={(e) =>
                       handleAmountChange(index, e, "percentage", "bp")
@@ -644,13 +580,7 @@ const FinancialProfessionalFee = ({
       <div className="fee-title">Financial Professional Fee</div>
       <div className="fee-options-container">
         <label className="fee-option">
-          {/* <input
-            type="radio"
-            value="flat"
-            checked={feeType === "flat"}
-            onChange={handleFeeChange}
-            className="radio-input"
-          /> */}
+
           <Radio
             selectedValue={feeType}
             value="flat"
@@ -660,13 +590,7 @@ const FinancialProfessionalFee = ({
           <div className="fee-option-title">Flat</div>
         </label>
         <label className="fee-option">
-          {/* <input
-            type="radio"
-            value="fixed"
-            checked={feeType === "fixed"}
-            onChange={handleFeeChange}
-            className="radio-input"
-          /> */}
+
           <Radio
             selectedValue={feeType}
             value="fixed"
@@ -676,13 +600,7 @@ const FinancialProfessionalFee = ({
           <div className="fee-option-title">Fixed</div>
         </label>
         <label className="fee-option">
-          {/* <input
-            type="radio"
-            value="tier"
-            checked={feeType === "tier"}
-            onChange={handleFeeChange}
-            className="radio-input"
-          /> */}
+
           <Radio
             selectedValue={feeType}
             value="tier"
@@ -692,13 +610,7 @@ const FinancialProfessionalFee = ({
           <div className="fee-option-title">Tier</div>
         </label>
         <label className="fee-option">
-          {/* <input
-            type="radio"
-            value="breakpoint"
-            checked={feeType === "breakpoint"}
-            onChange={handleFeeChange}
-            className="radio-input"
-          /> */}
+          
           <Radio
             selectedValue={feeType}
             value="breakpoint"

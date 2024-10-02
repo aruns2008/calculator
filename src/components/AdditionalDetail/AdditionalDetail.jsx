@@ -145,7 +145,7 @@ const AdditionalDetail = ({
         {["0%", "10%", "15%", "20%", "25%"].map((discount) => (
           <label key={discount} className="discount-item">
             <Radio              
-              selectedValue={selectedDiscount}
+              selectedValue={selectedDiscount || 0}
               value={discount}
               onchange={handleDiscountChange}
               name="auaDiscount"             

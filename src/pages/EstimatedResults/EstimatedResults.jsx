@@ -11,7 +11,7 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { storeData, retrieveData } from "../../utils/dynamoDB";
 import formatDate from "../../utils/dateFormatter";
 import { useParams } from "react-router-dom";
-const EstimatedResults = () => {  
+const EstimatedResults = () => {
   const navigate = useNavigate();
   const { scenarioId } = useParams();
   const {
@@ -70,7 +70,7 @@ const EstimatedResults = () => {
   const handleNewEstimate = () => {
     const accountValues = getCalculationDataValue("account-value") || [];
     const calculationLength = accountValues.length;
-    if (index < 2) {     
+    if (index < 2) {
       if (
         (index === 0 &&
           (accountValues[1] === "" || accountValues[1] === undefined)) ||
@@ -134,35 +134,24 @@ const EstimatedResults = () => {
   };
   const formatId = (name) => name.replace(/\s+/g, "");
 
-  // const handleShare = async (index, type) => {
-  //   setShareIndex(index);
-  //   setShareType(type);
-  //   const currentDate = new Date();
-  //   setShareDate(formatDate(currentDate));
-  //   const scenarioName =
-  //     getCalculationDataValue("scenario-name")[index] || "test";
-  //   setLink(
-  //     `http://localhost:3001/scenario-viewer?scenarioId=${formatId(
-  //       scenarioName
-  //     )}`
-  //   );
-  //   setShareModal(true);
-  // };
-
   const handleShare = async (index, type) => {
     setShareIndex(index);
     setShareType(type);
     const currentDate = new Date();
-    setShareDate(formatDate(currentDate));  
+    setShareDate(formatDate(currentDate));
+    
     const scenarioName = getCalculationDataValue("scenario-name")[index] || "test";
-    const baseURL = window.location.origin;
-    const shareLink = `${baseURL}/scenario-viewer?scenarioId=${formatId(scenarioName)}`;
+    const formattedId = formatId(scenarioName);
+    
+    // Base URL for sharing
+    const shareLink = `https://aruns2008.github.io/calculator/#/scenario-viewer?scenarioId=${formattedId}`;
+    
     setLink(shareLink);
     setShareModal(true);
-  };
-  
+};
 
-  const handleAgreeAndContinue = async () => {    
+
+  const handleAgreeAndContinue = async () => {
     let scenarioName = "";
     let data = {};
     if (shareType === "group-scenario") {
@@ -593,7 +582,7 @@ const EstimatedResults = () => {
               sx={{ fill: "white", width: "20px", height: "20px" }}
             />
             <p className="modal-notification-message">
-              Your "My Estimate" has been saved successfully. Last update:
+              Estimate has been saved successfully. Last update:
               <span>{shareDate}</span>
             </p>
           </div>
