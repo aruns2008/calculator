@@ -67,17 +67,17 @@ const ExportToPDF = ({
         heightLeft -= pageHeight;
       }
 
-      pdf.save("download.pdf");
+      // pdf.save("download.pdf");
 
       // Revert the styles back to original
-      input.style.display = originalDisplay;
-      input.style.padding = "";
-      input.style.width = "";
-      input.style.margin = "";
+      // input.style.display = originalDisplay;
+      // input.style.padding = "";
+      // input.style.width = "";
+      // input.style.margin = "";
 
-      setShowPdf(false);
-      setPdfType("");
-      setPdfIndex("");
+      // setShowPdf(false);
+      // setPdfType("");
+      // setPdfIndex("");
     });
   };
 
