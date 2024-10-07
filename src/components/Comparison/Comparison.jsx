@@ -27,6 +27,9 @@ const Comparison = ({ handlePdfGeneration, handleShare }) => {
     handleDelete,
     calculationData,
   } = useCalculationStorage();
+
+  console.log("This is the fpValues",fpValues);
+
   const renderValue = (value) => {
     if (value)
       return (
