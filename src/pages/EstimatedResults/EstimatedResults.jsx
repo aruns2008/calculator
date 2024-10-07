@@ -218,7 +218,8 @@ const EstimatedResults = () => {
         <div className="pdf-sectionn">
           <ExportToPDF
             dates={dates}
-            showPdf={showPdf}
+            showPdf={true}
+            // showPdf={showPdf}
             pdfType={pdfType}
             pdfIndex={pdfIndex}
             setShowPdf={setShowPdf}

@@ -110,7 +110,7 @@
 }
 
 .table-wrapper {
-    overflow: auto;
+    overflow: hidden;
     max-width: 100%;
 }
 
