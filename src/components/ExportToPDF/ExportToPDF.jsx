@@ -67,17 +67,17 @@ const ExportToPDF = ({
         heightLeft -= pageHeight;
       }
 
-      // pdf.save("download.pdf");
+      pdf.save("download.pdf");
 
       // Revert the styles back to original
-      // input.style.display = originalDisplay;
-      // input.style.padding = "";
-      // input.style.width = "";
-      // input.style.margin = "";
+      input.style.display = originalDisplay;
+      input.style.padding = "";
+      input.style.width = "";
+      input.style.margin = "";
 
-      // setShowPdf(false);
-      // setPdfType("");
-      // setPdfIndex("");
+      setShowPdf(false);
+      setPdfType("");
+      setPdfIndex("");
     });
   };
 
@@ -505,7 +505,7 @@ const ExportToPDF = ({
                   </div>
                 </div>
                 <div className="results-divider sub"></div>
-                <div className="row">
+                <div className="pdf-results-section">
                   <div className="label">
                     Financial Professional Fee
                     <span>
@@ -527,7 +527,7 @@ const ExportToPDF = ({
                   </div>
                 </div>
                 <div className="results-divider"></div>
-                <div className="row">
+                <div className="pdf-results-section">
                   <div className="label">
                     Program Fee
                     <span>
@@ -554,7 +554,7 @@ const ExportToPDF = ({
                   </div>
                 </div>
                 <div className="results-divider"></div>
-                <div className="row">
+                <div className="pdf-results-section">
                   <div className="label">
                     Strategist Fee (if applicable)
                     <span>
@@ -583,7 +583,7 @@ const ExportToPDF = ({
                   </div>
                 </div>
                 <div className="results-divider"></div>
-                <div className="row">
+                <div className="pdf-results-section">
                   <div className="label">
                     Total Account Fee (annualized)
                     <span>
@@ -612,7 +612,7 @@ const ExportToPDF = ({
                   </div>
                 </div>
                 <div className="results-divider"></div>
-                <div className="row">
+                <div className="pdf-results-section">
                   <div className="label">
                     Fund Expenses***
                     <span>
@@ -632,7 +632,7 @@ const ExportToPDF = ({
                   </div>
                 </div>
                 <div className="results-divider"></div>
-                <div className="row">
+                <div className="pdf-results-section">
                   <div className="label total_client_fee">
                     *Total Client Fees
                   </div>
@@ -674,7 +674,7 @@ const ExportToPDF = ({
                   </div>
                 </div>
                 <div className="results-divider"></div>
-                <div className="row">
+                <div className="pdf-results-section">
                   <div className="label">
                     Gross Annual Fee to Financial Professional
                   </div>
@@ -700,7 +700,7 @@ const ExportToPDF = ({
                   </div>
                 </div>
                 <div className="results-divider"></div>
-                <div className="row">
+                <div className="pdf-results-section">
                   <div className="label second-table">
                     Net - Program fee paid by client was selected
                   </div>
@@ -734,7 +734,7 @@ const ExportToPDF = ({
                     Scenario Assumptions
                   </span>
                   <div className="results-divider"></div>
-                  <div className="row">
+                  <div className="pdf-results-section">
                     <div className="label pdf-bottom-section">
                       Account Value
                     </div>
@@ -749,7 +749,7 @@ const ExportToPDF = ({
                     </div>
                   </div>
                   <div className="results-divider"></div>
-                  <div className="row">
+                  <div className="pdf-results-section">
                     <div className="label pdf-bottom-section">
                       WealthPort Household value
                     </div>
@@ -764,7 +764,7 @@ const ExportToPDF = ({
                     </div>
                   </div>
                   <div className="results-divider"></div>
-                  <div className="row">
+                  <div className="pdf-results-section">
                     <div className="label pdf-bottom-section">
                       Financial Professional Fee Type
                     </div>
@@ -773,7 +773,7 @@ const ExportToPDF = ({
                     </div>
                   </div>
                   <div className="results-divider"></div>
-                  <div className="row">
+                  <div className="pdf-results-section">
                     <div className="label pdf-bottom-section">
                       Program Selected
                     </div>
@@ -787,7 +787,7 @@ const ExportToPDF = ({
                     </div>
                   </div>
                   <div className="results-divider"></div>
-                  <div className="row">
+                  <div className="pdf-results-section">
                     <div className="label pdf-bottom-section">
                       Financial Professional AUA discount applied
                     </div>
@@ -808,7 +808,7 @@ const ExportToPDF = ({
                     Program Fee Schedule (UMA/SMA)
                   </span>
                   <div className="results-divider"></div>
-                  <div className="row">
+                  <div className="pdf-results-section">
                     <div className="label pdf-bottom-section">
                       Account Value
                     </div>
@@ -823,7 +823,7 @@ const ExportToPDF = ({
                     </div>
                   </div>
                   <div className="results-divider"></div>
-                  <div className="row">
+                  <div className="pdf-results-section">
                     <div className="label pdf-bottom-section">
                       WealthPort Household value
                     </div>
@@ -838,7 +838,7 @@ const ExportToPDF = ({
                     </div>
                   </div>
                   <div className="results-divider"></div>
-                  <div className="row">
+                  <div className="pdf-results-section">
                     <div className="label pdf-bottom-section">
                       Financial Professional Fee Type
                     </div>
@@ -847,7 +847,7 @@ const ExportToPDF = ({
                     </div>
                   </div>
                   <div className="results-divider"></div>
-                  <div className="row">
+                  <div className="pdf-results-section">
                     <div className="label pdf-bottom-section">
                       Program Selected
                     </div>
@@ -861,7 +861,7 @@ const ExportToPDF = ({
                     </div>
                   </div>
                   <div className="results-divider"></div>
-                  <div className="row">
+                  <div className="pdf-results-section">
                     <div className="label pdf-bottom-section">
                       Financial Professional AUA discount applied
                     </div>

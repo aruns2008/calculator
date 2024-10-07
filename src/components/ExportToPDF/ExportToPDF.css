@@ -236,7 +236,7 @@
   color: rgba(28, 43, 54, 1);
   padding-top: 10px;
 }
-.row{
+.pdf-results-section{
   display: flex;
   justify-content: space-between;
   padding: 6px 0;
