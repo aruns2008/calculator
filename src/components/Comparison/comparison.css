@@ -4,7 +4,7 @@
     /* margin: 6px 0px; */
     font-family: Avenir Next, -apple-system, Roboto, Helvetica, sans-serif !important;
     border-bottom: 1px solid #9FB1BD;
-
+    border-right: 1px solid #9fb1bd;
 }
 
 .header-labels,
@@ -110,7 +110,7 @@
 }
 
 .table-wrapper {
-    overflow: auto;
+    overflow: hidden;
     max-width: 100%;
 }
 

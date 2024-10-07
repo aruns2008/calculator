@@ -5,7 +5,6 @@ import CircularProgress from "../CircularProgress/CircularProgress";
 import { useCalculationStorage } from "../../context/StorageContext";
 import Radio from "../Radio/Radio";
 import NumberInput from "../../components/NumberInput/NumberInput";
-import SelectComponent from "../SelectComponent/SelectComponent";
 import {
   StrategistCaapSassConst,
   StrategistCaapConst,

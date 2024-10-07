@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { HashRouter as Router, Route, Routes } from "react-router-dom";
 import CalculatorPage from "./pages/calculator/Calculator";
 import { CalculationStorageProvider } from "./context/StorageContext";
 import EstimatedResults from "./pages/EstimatedResults/EstimatedResults";

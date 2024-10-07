@@ -44,7 +44,7 @@ const CircularProgress = ({ percentage }) => {
         fill="#333"
         className="percentage-text"
       >
-        {`${cappedPercentage}%`}        
+        {!isNaN(cappedPercentage) ? `${cappedPercentage}%`: "0%"}        
       </text>
     </svg>
   );

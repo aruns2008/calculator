@@ -20,14 +20,7 @@ const ProgramFeePayment = ({ handleChange, getCalculationDataValue }) => {
       <div className="subheader-title">Select who pays program fee</div>
       <div className="options-container">
         <label className="option-client">
-          {/* <input
-            type="radio"
-            name="programOption"
-            value="client"
-            checked={paymentOption === "client"}
-            onChange={handlePaymentChange}
-            className="radio-input"
-          /> */}
+          
           <Radio
             selectedValue={paymentOption}
             value="client"
@@ -37,14 +30,7 @@ const ProgramFeePayment = ({ handleChange, getCalculationDataValue }) => {
           <div className="option-text">Paid by Client</div>
         </label>
         <label className="option-fp">
-          {/* <input
-            type="radio"
-            name="programOption"
-            value="fp"
-            checked={paymentOption === "fp"}
-            onChange={handlePaymentChange}
-            className="radio-input"
-          /> */}
+          
             <Radio
             selectedValue={paymentOption}
             value="fp"

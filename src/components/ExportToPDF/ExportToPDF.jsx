@@ -43,8 +43,6 @@ const ExportToPDF = ({
     const input = printRef.current;
     const originalDisplay = input.style.display;
     input.style.display = "block";
-
-    // Add a temporary style to center the content and adjust padding
     input.style.padding = "20px";
     input.style.width = "100%";
     input.style.maxWidth = "800px";
